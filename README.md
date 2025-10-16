@@ -71,7 +71,7 @@ npx expo start
 │   ├── AnalysisScreen.tsx      # Charts and indicators overview
 │   └── IndicatorDetailScreen.tsx # Detailed indicator explanations
 ├── services/
-│   └── stockService.ts         # Stock data fetching (mock data)
+│   └── stockService.ts         # Stock data fetching from real APIs
 ├── utils/
 │   └── technicalAnalysis.ts    # Technical indicator calculations
 ├── types/
@@ -82,7 +82,7 @@ npx expo start
 ## Technical Implementation
 
 ### Data Source
-Currently uses mock data for demonstration. In a production app, you would integrate with real stock APIs such as:
+Fetches real stock data from multiple APIs including Yahoo Finance, Alpha Vantage, and Finnhub. The app will attempt to fetch data from these sources and display an error if all sources fail, ensuring no mock data is used in production.
 - Alpha Vantage
 - Yahoo Finance API
 - IEX Cloud

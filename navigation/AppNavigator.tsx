@@ -2,7 +2,7 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from '../screens/HomeScreen';
-import AnalysisScreenDemo from '../screens/AnalysisScreenDemo';
+import AnalysisScreen from '../screens/AnalysisScreen';
 import IndicatorDetailScreen from '../screens/IndicatorDetailScreen';
 import TradingViewDemo from '../screens/TradingViewDemo';
 import { TechnicalIndicator } from '../types';
@@ -49,7 +49,7 @@ export default function AppNavigator() {
         />
         <Stack.Screen 
           name="Analysis" 
-          component={AnalysisScreenDemo}
+          component={AnalysisScreen}
           options={({ route }) => ({ 
             title: `${route.params.symbol} Analysis` 
           })}

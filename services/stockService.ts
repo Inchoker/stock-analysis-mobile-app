@@ -265,96 +265,9 @@ export async function fetchStockData(symbol: string, period: string): Promise<St
     }
   }
   
-  return getFallbackData(symbol, period);
-}
-
-function getFallbackData(symbol: string, period: string): StockData {
-  const days = period === '1W' ? 7 : period === '1M' ? 30 : period === '3M' ? 90 : period === '6M' ? 180 : 365;
-  
-  const realBasePrices: Record<string, number> = {
-    'FPT': 75.5,
-    'FPT.VN': 75.5,
-    'VIC': 85.2,
-    'VIC.VN': 85.2,
-    'VCB': 92.8,
-    'VCB.VN': 92.8,
-    'VHM': 45.3,
-    'VHM.VN': 45.3,
-    'HPG': 25.7,
-    'HPG.VN': 25.7,
-    'AAPL': 175.0,
-    'GOOGL': 142.5,
-    'MSFT': 415.8,
-    'TSLA': 242.8,
-    'NVDA': 875.2,
-    'META': 505.6,
-    'AMZN': 145.8,
-  };
-  
-  const basePrice = realBasePrices[symbol.toUpperCase()] || realBasePrices[`${symbol.toUpperCase()}.VN`] || 100;
-  
-  const prices: number[] = [];
-  const volumes: number[] = [];
-  const dates: string[] = [];
-  
-  let currentPrice = basePrice;
-  const now = new Date();
-  
-  const isVietnameseStock = symbol.toUpperCase().includes('FPT') || symbol.toUpperCase().includes('VIC') || 
-                           symbol.toUpperCase().includes('VCB') || symbol.includes('.VN');
-  
-  for (let i = 0; i < days; i++) {
-    const dayOfWeek = (now.getDay() - (days - 1 - i)) % 7;
-    const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
-    
-    if (!isWeekend) {
-      const volatility = isVietnameseStock ? 0.025 : 0.02;
-      const trend = isVietnameseStock ? 0.0008 : 0.0005;
-      
-      const randomEvent = Math.random();
-      let eventMultiplier = 1;
-      
-      if (randomEvent < 0.05) {
-        eventMultiplier = Math.random() < 0.5 ? 0.95 : 1.05;
-      }
-      
-      const change = (Math.random() - 0.5) * volatility + trend;
-      currentPrice = currentPrice * (1 + change) * eventMultiplier;
-      
-      currentPrice = Math.max(currentPrice, basePrice * 0.7);
-      currentPrice = Math.min(currentPrice, basePrice * 1.4);
-      
-      prices.push(parseFloat(currentPrice.toFixed(2)));
-      
-      const baseVolume = isVietnameseStock ? 800000 : 2000000;
-      const volumeVariation = Math.random() * 0.5 + 0.75;
-      volumes.push(Math.floor(baseVolume * volumeVariation));
-      
-      const date = new Date(now);
-      date.setDate(date.getDate() - (days - 1 - i));
-      dates.push(date.toISOString().split('T')[0]);
-    }
-  }
-  
-  if (prices.length < 5) {
-    for (let i = prices.length; i < Math.min(days, 30); i++) {
-      const change = (Math.random() - 0.5) * 0.02;
-      currentPrice = currentPrice * (1 + change);
-      prices.push(parseFloat(currentPrice.toFixed(2)));
-      volumes.push(Math.floor(Math.random() * 1000000 + 500000));
-      
-      const date = new Date(now);
-      date.setDate(date.getDate() - (30 - 1 - i));
-      dates.push(date.toISOString().split('T')[0]);
-    }
-  }
-  
-  return {
-    symbol: symbol.toUpperCase(),
-    prices,
-    volumes,
-    dates
-  };
+  // If all data sources fail, provide a clear error message
+  const errorDetails = lastError ? `: ${lastError.message}` : '';
+  throw new Error(`Unable to fetch real stock data${errorDetails}. Please check your internet connection or try again later.`);
 }
 
 export const POPULAR_STOCKS = [

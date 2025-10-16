@@ -55,7 +55,14 @@ export default function AnalysisScreen({ navigation, route }: Props) {
       setLoading(true);
       setError(null);
       
+      console.log(`Fetching data for ${currentSymbol} (${chartConfig.timeframe})`);
       const data = await fetchStockData(currentSymbol, chartConfig.timeframe);
+      console.log('Received data:', data);
+      
+      if (!data || !data.prices || data.prices.length === 0) {
+        throw new Error('No price data received from APIs');
+      }
+      
       setStockData(data);
       
       const { indicators, calculations } = calculateAllIndicators(data.prices);
@@ -67,8 +74,10 @@ export default function AnalysisScreen({ navigation, route }: Props) {
         calculations,
       });
     } catch (err) {
-      setError('Failed to load stock data. Please try again.');
-      Alert.alert('Error', 'Failed to load stock data. Please try again.');
+      console.error('Stock data loading error:', err);
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
+      setError(`Failed to load stock data: ${errorMessage}`);
+      Alert.alert('Error', `Failed to load stock data: ${errorMessage}`);
     } finally {
       setLoading(false);
     }

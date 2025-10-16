@@ -8,6 +8,7 @@ import {
   ScrollView,
 } from 'react-native';
 import { LineChart, BarChart } from 'react-native-chart-kit';
+import Svg, { Rect, Line as SvgLine } from 'react-native-svg';
 import { StockData, ChartConfig, IndicatorCalculation } from '../types';
 
 interface SimpleTradingChartProps {
@@ -178,7 +179,13 @@ export default function SimpleTradingChart({
            config.chartType === 'area' ? 'Area Chart' : 'Price Chart'}
         </Text>
         
-        {config.chartType === 'area' ? (
+        {config.chartType === 'candlestick' ? (
+          <CandlestickChart
+            stockData={stockData}
+            width={chartWidth}
+            height={chartHeight}
+          />
+        ) : config.chartType === 'area' ? (
           <LineChart
             data={chartData}
             width={chartWidth}
@@ -272,6 +279,160 @@ export default function SimpleTradingChart({
     </View>
   );
 }
+
+// Custom Candlestick Chart Component
+const CandlestickChart = ({ 
+  stockData, 
+  width, 
+  height 
+}: { 
+  stockData: StockData; 
+  width: number; 
+  height: number; 
+}) => {
+  if (!stockData.opens || !stockData.highs || !stockData.lows || !stockData.closes) {
+    return (
+      <View style={{ width, height, justifyContent: 'center', alignItems: 'center' }}>
+        <Text>OHLC data not available</Text>
+      </View>
+    );
+  }
+
+  const dataLength = Math.min(stockData.prices.length, 20); // Show last 20 candles
+  const startIndex = Math.max(0, stockData.prices.length - dataLength);
+  
+  const opens = stockData.opens.slice(startIndex);
+  const highs = stockData.highs.slice(startIndex);
+  const lows = stockData.lows.slice(startIndex);
+  const closes = stockData.closes.slice(startIndex);
+  const dates = stockData.dates.slice(startIndex);
+
+  // Calculate price range for scaling
+  const allPrices = [...highs, ...lows];
+  const maxPrice = Math.max(...allPrices);
+  const minPrice = Math.min(...allPrices);
+  const priceRange = maxPrice - minPrice;
+  const padding = priceRange * 0.1; // 10% padding
+  const scaledMax = maxPrice + padding;
+  const scaledMin = minPrice - padding;
+  const scaledRange = scaledMax - scaledMin;
+
+  const chartPadding = 40;
+  const chartAreaHeight = height - chartPadding * 2;
+  const chartAreaWidth = width - chartPadding * 2;
+  const candleWidth = Math.max(6, chartAreaWidth / dataLength * 0.6);
+  const candleSpacing = chartAreaWidth / dataLength;
+
+  // Scale price to chart coordinates
+  const scalePrice = (price: number) => {
+    return chartAreaHeight - ((price - scaledMin) / scaledRange) * chartAreaHeight + chartPadding;
+  };
+
+  return (
+    <View style={{ width, height, backgroundColor: '#fff', borderRadius: 8 }}>
+      <Svg width={width} height={height}>
+        {/* Grid lines */}
+        {[0, 0.25, 0.5, 0.75, 1].map((ratio, index) => {
+          const y = chartPadding + ratio * chartAreaHeight;
+          const price = scaledMax - ratio * scaledRange;
+          return (
+            <SvgLine
+              key={index}
+              x1={chartPadding}
+              y1={y}
+              x2={width - chartPadding}
+              y2={y}
+              stroke="#e0e0e0"
+              strokeWidth={0.5}
+            />
+          );
+        })}
+
+        {/* Candlesticks */}
+        {opens.map((open, index) => {
+          const high = highs[index];
+          const low = lows[index];
+          const close = closes[index];
+          
+          const x = chartPadding + index * candleSpacing + candleSpacing / 2;
+          const openY = scalePrice(open);
+          const closeY = scalePrice(close);
+          const highY = scalePrice(high);
+          const lowY = scalePrice(low);
+          
+          const isGreen = close > open;
+          const bodyTop = Math.min(openY, closeY);
+          const bodyBottom = Math.max(openY, closeY);
+          const bodyHeight = Math.max(1, bodyBottom - bodyTop);
+          
+          return (
+            <React.Fragment key={index}>
+              {/* High-Low line (wick) */}
+              <SvgLine
+                x1={x}
+                y1={highY}
+                x2={x}
+                y2={lowY}
+                stroke={isGreen ? '#4CAF50' : '#F44336'}
+                strokeWidth={1}
+              />
+              
+              {/* Open-Close rectangle (body) */}
+              <Rect
+                x={x - candleWidth / 2}
+                y={bodyTop}
+                width={candleWidth}
+                height={bodyHeight}
+                fill={isGreen ? '#4CAF50' : '#F44336'}
+                stroke={isGreen ? '#4CAF50' : '#F44336'}
+                strokeWidth={1}
+              />
+            </React.Fragment>
+          );
+        })}
+      </Svg>
+      
+      {/* Price labels */}
+      <View style={{ position: 'absolute', left: 0, top: chartPadding }}>
+        {[0, 0.25, 0.5, 0.75, 1].map((ratio, index) => {
+          const price = scaledMax - ratio * scaledRange;
+          const y = ratio * chartAreaHeight - 8;
+          return (
+            <Text
+              key={index}
+              style={{
+                position: 'absolute',
+                top: y,
+                fontSize: 10,
+                color: '#666',
+                backgroundColor: '#fff',
+                paddingHorizontal: 2,
+              }}
+            >
+              {price.toFixed(2)}
+            </Text>
+          );
+        })}
+      </View>
+      
+      {/* Date labels */}
+      <View style={{ position: 'absolute', bottom: 10, left: chartPadding, right: chartPadding }}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          {dates.map((date, index) => {
+            if (index % Math.max(1, Math.floor(dates.length / 4)) === 0) {
+              return (
+                <Text key={index} style={{ fontSize: 10, color: '#666' }}>
+                  {date.split('-')[2]}
+                </Text>
+              );
+            }
+            return null;
+          })}
+        </View>
+      </View>
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {

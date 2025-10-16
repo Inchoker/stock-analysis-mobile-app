@@ -41,29 +41,51 @@ export default function AdvancedChart({
     volume: number;
   } | null>(null);
 
-  // Convert price data to OHLC format (simulated since we only have close prices)
+  // Convert stock data to OHLC format using real data
   const ohlcData: OHLCData[] = useMemo(() => {
+    if (!stockData || !stockData.dates || stockData.dates.length === 0) {
+      return [];
+    }
+    
     return stockData.dates.map((date, index) => {
-      const close = stockData.prices[index];
-      // Simulate OHLC data based on close price with realistic variations
-      const variation = close * 0.02; // 2% max variation
-      const open = index > 0 ? stockData.prices[index - 1] : close;
-      const high = close + Math.random() * variation;
-      const low = close - Math.random() * variation;
+      // Use real OHLC data if available, otherwise fall back to close price
+      const close = stockData.closes?.[index] ?? stockData.prices[index];
+      const open = stockData.opens?.[index] ?? (index > 0 ? stockData.closes?.[index - 1] ?? stockData.prices[index - 1] : close);
+      const high = stockData.highs?.[index] ?? close;
+      const low = stockData.lows?.[index] ?? close;
+      const volume = stockData.volumes[index] || 0;
+      
+      // Ensure OHLC relationships are correct
+      const finalHigh = Math.max(open, high, low, close);
+      const finalLow = Math.min(open, high, low, close);
       
       return {
         date,
-        open: Math.max(open, low),
-        high: Math.max(high, open, close),
-        low: Math.min(low, open, close),
-        close,
-        volume: stockData.volumes[index] || Math.random() * 1000000,
+        open: Number(open) || close,
+        high: Number(finalHigh) || close,
+        low: Number(finalLow) || close,
+        close: Number(close) || 0,
+        volume: Number(volume) || 0,
       };
-    });
+    }).filter(item => item.close > 0); // Filter out invalid data points
   }, [stockData]);
 
   // Prepare chart data for ECharts
   const chartOption = useMemo(() => {
+    if (!ohlcData || ohlcData.length === 0) {
+      return {
+        title: {
+          text: 'No data available',
+          left: 'center',
+          top: 'center',
+          textStyle: { color: '#666' }
+        },
+        xAxis: { show: false },
+        yAxis: { show: false },
+        series: []
+      };
+    }
+
     const dates = ohlcData.map(item => item.date);
     const candlestickData = ohlcData.map(item => [item.open, item.close, item.low, item.high]);
     const volumeData = ohlcData.map(item => item.volume);
@@ -122,7 +144,7 @@ export default function AdvancedChart({
 
     // Moving Averages
     if (chartConfig.showMA) {
-      // Simple 20-day MA (simulated)
+      // 20-day moving average
       const ma20Data = lineData.map((_, index) => {
         if (index < 19) return null;
         const sum = lineData.slice(index - 19, index + 1).reduce((a, b) => a + b, 0);
@@ -376,14 +398,16 @@ export default function AdvancedChart({
       </View>
 
       {/* Current Price Info */}
-      <View style={styles.priceInfo}>
-        <Text style={styles.currentPrice}>
-          Current: ${ohlcData[ohlcData.length - 1]?.close.toFixed(2)}
-        </Text>
-        <Text style={styles.priceChange}>
-          Change: {((ohlcData[ohlcData.length - 1]?.close - ohlcData[ohlcData.length - 2]?.close) || 0).toFixed(2)}
-        </Text>
-      </View>
+      {ohlcData && ohlcData.length > 0 && (
+        <View style={styles.priceInfo}>
+          <Text style={styles.currentPrice}>
+            Current: ${ohlcData[ohlcData.length - 1]?.close.toFixed(2) || 'N/A'}
+          </Text>
+          <Text style={styles.priceChange}>
+            Change: {((ohlcData[ohlcData.length - 1]?.close - ohlcData[ohlcData.length - 2]?.close) || 0).toFixed(2)}
+          </Text>
+        </View>
+      )}
     </View>
   );
 }
