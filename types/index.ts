@@ -3,6 +3,29 @@ export interface StockData {
   prices: number[];
   volumes: number[];
   dates: string[];
+  opens?: number[];
+  highs?: number[];
+  lows?: number[];
+  closes?: number[];
+}
+
+export interface OHLCData {
+  date: string;
+  open: number;
+  high: number;
+  low: number;
+  close: number;
+  volume: number;
+}
+
+export interface ChartConfig {
+  chartType: 'candlestick' | 'line' | 'area';
+  showVolume: boolean;
+  showMA: boolean;
+  showBollinger: boolean;
+  showRSI: boolean;
+  showMACD: boolean;
+  timeframe: string;
 }
 
 export interface TechnicalIndicator {

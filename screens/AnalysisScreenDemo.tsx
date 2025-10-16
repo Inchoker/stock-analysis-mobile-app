@@ -12,12 +12,10 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RouteProp } from '@react-navigation/native';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { StockData, TechnicalIndicator, StockAnalysis, ChartConfig } from '../types';
-import { fetchStockData } from '../services/stockService';
 import { calculateAllIndicators } from '../utils/technicalAnalysis';
-import SimpleTradingChart from '../components/SimpleTradingChart';
+import WebTradingChart from '../components/WebTradingChart';
 import ChartToolbar from '../components/ChartToolbar';
 import MarketData from '../components/MarketData';
-import { Dimensions } from 'react-native';
 
 type AnalysisScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Analysis'>;
 type AnalysisScreenRouteProp = RouteProp<RootStackParamList, 'Analysis'>;
@@ -27,7 +25,64 @@ interface Props {
   route: AnalysisScreenRouteProp;
 }
 
-const screenWidth = Dimensions.get('window').width;
+// Mock data generator for demo purposes
+const generateMockStockData = (symbol: string, period: string): StockData => {
+  const basePrice = Math.random() * 100 + 50; // Random price between 50-150
+  const dataPoints = period === '1W' ? 7 : period === '1M' ? 30 : period === '3M' ? 90 : 365;
+  
+  const prices: number[] = [];
+  const volumes: number[] = [];
+  const dates: string[] = [];
+  const opens: number[] = [];
+  const highs: number[] = [];
+  const lows: number[] = [];
+  const closes: number[] = [];
+  
+  let currentPrice = basePrice;
+  
+  for (let i = 0; i < dataPoints; i++) {
+    const date = new Date();
+    date.setDate(date.getDate() - (dataPoints - i));
+    dates.push(date.toISOString().split('T')[0]);
+    
+    // Simulate price movement
+    const change = (Math.random() - 0.5) * currentPrice * 0.05; // ±2.5% daily change
+    currentPrice = Math.max(currentPrice + change, 1);
+    
+    const open = i > 0 ? closes[i - 1] : currentPrice;
+    const close = currentPrice;
+    
+    // Generate proper OHLC data ensuring correct relationships
+    const maxOC = Math.max(open, close);
+    const minOC = Math.min(open, close);
+    
+    // High must be at least the maximum of open/close, with possible additional upward movement
+    const additionalHigh = Math.random() * maxOC * 0.03; // Up to 3% additional upward movement
+    const high = maxOC + additionalHigh;
+    
+    // Low must be at most the minimum of open/close, with possible additional downward movement
+    const additionalLow = Math.random() * minOC * 0.03; // Up to 3% additional downward movement  
+    const low = Math.max(minOC - additionalLow, 0.01); // Ensure low is positive
+    
+    opens.push(parseFloat(open.toFixed(2)));
+    highs.push(parseFloat(high.toFixed(2)));
+    lows.push(parseFloat(low.toFixed(2)));
+    closes.push(parseFloat(close.toFixed(2)));
+    prices.push(parseFloat(close.toFixed(2)));
+    volumes.push(Math.floor(Math.random() * 10000000 + 1000000));
+  }
+  
+  return {
+    symbol,
+    prices,
+    volumes,
+    dates,
+    opens,
+    highs,
+    lows,
+    closes,
+  };
+};
 
 export default function AnalysisScreen({ navigation, route }: Props) {
   const { symbol, period } = route.params;
@@ -36,7 +91,7 @@ export default function AnalysisScreen({ navigation, route }: Props) {
   const [analysis, setAnalysis] = useState<StockAnalysis | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [chartConfig, setChartConfig] = useState<ChartConfig>({
-    chartType: 'candlestick',
+    chartType: 'line',
     showVolume: true,
     showMA: false,
     showBollinger: false,
@@ -55,7 +110,11 @@ export default function AnalysisScreen({ navigation, route }: Props) {
       setLoading(true);
       setError(null);
       
-      const data = await fetchStockData(currentSymbol, chartConfig.timeframe);
+      // Simulate API delay
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Generate mock data
+      const data = generateMockStockData(currentSymbol, chartConfig.timeframe);
       setStockData(data);
       
       const { indicators, calculations } = calculateAllIndicators(data.prices);
@@ -176,15 +235,13 @@ export default function AnalysisScreen({ navigation, route }: Props) {
           <Text style={styles.periodText}>Period: {chartConfig.timeframe}</Text>
         </View>
 
-        {/* Advanced Price Chart */}
-        <SimpleTradingChart
+        {/* Trading Chart */}
+        <WebTradingChart
           stockData={stockData}
           calculations={analysis.calculations}
           config={chartConfig}
-          onConfigChange={handleChartConfigChange}
-        />
-
-        {/* Technical Indicators */}
+          onConfigChange={setChartConfig}
+        />        {/* Technical Indicators */}
         <View style={styles.indicatorsSection}>
           <Text style={styles.sectionTitle}>Technical Indicators</Text>
           {analysis.indicators.map((indicator, index) => (
@@ -225,7 +282,7 @@ export default function AnalysisScreen({ navigation, route }: Props) {
           <Text style={styles.sectionTitle}>Analysis Summary</Text>
           <View style={styles.summaryCard}>
             <Text style={styles.summaryText}>
-              Based on the technical indicators, here's what the analysis suggests:
+              📊 TradingView-like analysis complete! This demo shows:
             </Text>
             {analysis.indicators.map((indicator, index) => (
               <Text key={index} style={styles.summaryItem}>
@@ -233,7 +290,8 @@ export default function AnalysisScreen({ navigation, route }: Props) {
               </Text>
             ))}
             <Text style={styles.disclaimer}>
-              {'\n'}Disclaimer: This analysis is for educational purposes only and should not be considered as financial advice.
+              {'\n'}🚀 Features: Interactive charts, multiple chart types, technical indicators, volume analysis, and more!
+              {'\n\n'}Note: This is demo data. Connect to real APIs for live trading data.
             </Text>
           </View>
         </View>
@@ -250,9 +308,6 @@ const styles = StyleSheet.create({
   scrollContainer: {
     flex: 1,
     padding: 15,
-  },
-  content: {
-    padding: 20,
   },
   centerContainer: {
     flex: 1,
@@ -318,23 +373,6 @@ const styles = StyleSheet.create({
     color: '#666',
     textAlign: 'center',
     marginTop: 10,
-  },
-  chartContainer: {
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 15,
-    marginBottom: 20,
-    elevation: 3,
-  },
-  chartTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#333',
-    marginBottom: 15,
-    textAlign: 'center',
-  },
-  chart: {
-    borderRadius: 16,
   },
   indicatorsSection: {
     marginBottom: 20,
@@ -420,10 +458,10 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#666',
     marginBottom: 4,
-    lineHeight: 20,
+    lineHeight: 18,
   },
   disclaimer: {
-    fontSize: 12,
+    fontSize: 13,
     color: '#999',
     fontStyle: 'italic',
     lineHeight: 18,

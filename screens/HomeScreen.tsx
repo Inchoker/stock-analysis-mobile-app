@@ -117,13 +117,25 @@ export default function HomeScreen({ navigation }: Props) {
           <Text style={styles.analyzeButtonText}>Analyze Stock</Text>
         </TouchableOpacity>
 
+        {/* TradingView Demo Button */}
+        <TouchableOpacity 
+          style={styles.demoButton} 
+          onPress={() => navigation.navigate('TradingViewDemo')}
+        >
+          <Text style={styles.demoButtonText}>📈 Try TradingView Features</Text>
+        </TouchableOpacity>
+
         {/* Info Section */}
         <View style={styles.infoSection}>
           <Text style={styles.infoTitle}>What you'll get:</Text>
+          <Text style={styles.infoItem}>• Professional TradingView-like charts</Text>
+          <Text style={styles.infoItem}>• Candlestick, line, and area chart types</Text>
+          <Text style={styles.infoItem}>• Interactive crosshair and tooltips</Text>
           <Text style={styles.infoItem}>• Technical indicators (SMA, EMA, RSI, MACD)</Text>
-          <Text style={styles.infoItem}>• Bollinger Bands analysis</Text>
+          <Text style={styles.infoItem}>• Volume analysis and Bollinger Bands</Text>
+          <Text style={styles.infoItem}>• Multi-market support (Stocks, Crypto, Forex)</Text>
+          <Text style={styles.infoItem}>• Watchlist and real-time data</Text>
           <Text style={styles.infoItem}>• Buy/Sell/Hold recommendations</Text>
-          <Text style={styles.infoItem}>• Detailed explanations for each indicator</Text>
         </View>
       </View>
     </ScrollView>
@@ -251,11 +263,28 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 4,
-    marginBottom: 30,
+    marginBottom: 15,
   },
   analyzeButtonText: {
     fontSize: 18,
     fontWeight: 'bold',
+    color: '#fff',
+    textAlign: 'center',
+  },
+  demoButton: {
+    backgroundColor: '#9C27B0',
+    borderRadius: 8,
+    padding: 16,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.15,
+    shadowRadius: 3,
+    marginBottom: 30,
+  },
+  demoButtonText: {
+    fontSize: 16,
+    fontWeight: '600',
     color: '#fff',
     textAlign: 'center',
   },

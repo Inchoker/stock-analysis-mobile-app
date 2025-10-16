@@ -119,12 +119,26 @@ function processYahooData(result: any, symbol: string): StockData {
   const prices: number[] = [];
   const volumes: number[] = [];
   const dates: string[] = [];
+  const opens: number[] = [];
+  const highs: number[] = [];
+  const lows: number[] = [];
+  const closes: number[] = [];
   
   for (let i = 0; i < timestamps.length; i++) {
     if (quotes.close[i] !== null && quotes.close[i] !== undefined) {
-      prices.push(parseFloat(quotes.close[i].toFixed(2)));
+      const open = quotes.open?.[i] || quotes.close[i];
+      const high = quotes.high?.[i] || quotes.close[i];
+      const low = quotes.low?.[i] || quotes.close[i];
+      const close = quotes.close[i];
+      
+      prices.push(parseFloat(close.toFixed(2)));
       volumes.push(quotes.volume?.[i] || 0);
       dates.push(new Date(timestamps[i] * 1000).toISOString().split('T')[0]);
+      
+      opens.push(parseFloat(open.toFixed(2)));
+      highs.push(parseFloat(high.toFixed(2)));
+      lows.push(parseFloat(low.toFixed(2)));
+      closes.push(parseFloat(close.toFixed(2)));
     }
   }
   
@@ -132,7 +146,11 @@ function processYahooData(result: any, symbol: string): StockData {
     symbol,
     prices,
     volumes,
-    dates
+    dates,
+    opens,
+    highs,
+    lows,
+    closes
   };
 }
 
@@ -145,13 +163,27 @@ function processAlphaVantageData(data: any, symbol: string): StockData {
   const prices: number[] = [];
   const volumes: number[] = [];
   const dates: string[] = [];
+  const opens: number[] = [];
+  const highs: number[] = [];
+  const lows: number[] = [];
+  const closes: number[] = [];
   
   const sortedDates = Object.keys(timeSeries).sort();
   
   for (const date of sortedDates) {
     const dayData = timeSeries[date];
-    prices.push(parseFloat(dayData['4. close']));
-    volumes.push(parseInt(dayData['5. volume']) || 0);
+    const open = parseFloat(dayData['1. open']);
+    const high = parseFloat(dayData['2. high']);
+    const low = parseFloat(dayData['3. low']);
+    const close = parseFloat(dayData['4. close']);
+    const volume = parseInt(dayData['5. volume'], 10);
+    
+    opens.push(open);
+    highs.push(high);
+    lows.push(low);
+    closes.push(close);
+    prices.push(close);
+    volumes.push(volume);
     dates.push(date);
   }
   
@@ -159,14 +191,21 @@ function processAlphaVantageData(data: any, symbol: string): StockData {
     symbol,
     prices,
     volumes,
-    dates
+    dates,
+    opens,
+    highs,
+    lows,
+    closes
   };
 }
 
 function processFinnhubData(data: any, symbol: string): StockData {
-  const prices: number[] = data.c || [];
+  const closes: number[] = data.c || [];
   const volumes: number[] = data.v || [];
   const timestamps: number[] = data.t || [];
+  const opens: number[] = data.o || [];
+  const highs: number[] = data.h || [];
+  const lows: number[] = data.l || [];
   
   const dates: string[] = timestamps.map(ts => 
     new Date(ts * 1000).toISOString().split('T')[0]
@@ -174,9 +213,13 @@ function processFinnhubData(data: any, symbol: string): StockData {
   
   return {
     symbol,
-    prices,
+    prices: closes,
     volumes,
-    dates
+    dates,
+    opens,
+    highs,
+    lows,
+    closes
   };
 }
 

@@ -2,12 +2,14 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from '../screens/HomeScreen';
-import AnalysisScreen from '../screens/AnalysisScreen';
+import AnalysisScreenDemo from '../screens/AnalysisScreenDemo';
 import IndicatorDetailScreen from '../screens/IndicatorDetailScreen';
+import TradingViewDemo from '../screens/TradingViewDemo';
 import { TechnicalIndicator } from '../types';
 
 export type RootStackParamList = {
   Home: undefined;
+  TradingViewDemo: undefined;
   Analysis: {
     symbol: string;
     period: string;
@@ -41,8 +43,13 @@ export default function AppNavigator() {
           options={{ title: 'Stock Analysis' }}
         />
         <Stack.Screen 
+          name="TradingViewDemo" 
+          component={TradingViewDemo}
+          options={{ title: 'TradingView Features' }}
+        />
+        <Stack.Screen 
           name="Analysis" 
-          component={AnalysisScreen}
+          component={AnalysisScreenDemo}
           options={({ route }) => ({ 
             title: `${route.params.symbol} Analysis` 
           })}
