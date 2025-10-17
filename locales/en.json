@@ -20,7 +20,12 @@
     "popularStocks": "Popular Stocks",
     "analyzeButton": "Analyze Stock",
     "errorEmptySymbol": "Please enter a stock symbol",
-    "quickSelectHint": "Tap to select"
+    "quickSelectHint": "Tap to select",
+    "customPeriod": "Custom Period",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "selectDateRange": "Select Date Range",
+    "invalidDateRange": "Please select valid start and end dates"
   },
   "analysis": {
     "title": "Technical Analysis",
@@ -65,7 +70,10 @@
     "6M": "6 Months",
     "1Y": "1 Year",
     "2Y": "2 Years",
-    "5Y": "5 Years"
+    "3Y": "3 Years",
+    "5Y": "5 Years",
+    "MAX": "Lifetime",
+    "CUSTOM": "Custom"
   },
   "navigation": {
     "home": "Home",

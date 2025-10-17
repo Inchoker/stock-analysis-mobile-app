@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { POPULAR_STOCKS, TIME_PERIODS } from '../services/stockService';
 import LanguageSwitcher from '../components/LanguageSwitcher';
+import CustomDatePicker from '../components/CustomDatePicker';
 
 type HomeScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Home'>;
 
@@ -24,6 +25,9 @@ export default function HomeScreen({ navigation }: Props) {
   const { t } = useTranslation();
   const [symbol, setSymbol] = useState('');
   const [selectedPeriod, setSelectedPeriod] = useState('1M');
+  const [showCustomDatePicker, setShowCustomDatePicker] = useState(false);
+  const [customStartDate, setCustomStartDate] = useState<string>('');
+  const [customEndDate, setCustomEndDate] = useState<string>('');
 
   const handleAnalyze = () => {
     if (!symbol.trim()) {
@@ -31,14 +35,45 @@ export default function HomeScreen({ navigation }: Props) {
       return;
     }
 
+    if (selectedPeriod === 'CUSTOM') {
+      if (!customStartDate || !customEndDate) {
+        Alert.alert(t('common.error'), t('home.invalidDateRange'));
+        return;
+      }
+    }
+
     navigation.navigate('Analysis', {
       symbol: symbol.toUpperCase().trim(),
       period: selectedPeriod,
+      customStartDate: selectedPeriod === 'CUSTOM' ? customStartDate : undefined,
+      customEndDate: selectedPeriod === 'CUSTOM' ? customEndDate : undefined,
     });
   };
 
   const handleQuickSelect = (stockSymbol: string) => {
     setSymbol(stockSymbol);
+  };
+
+  const handlePeriodSelect = (period: string) => {
+    setSelectedPeriod(period);
+    if (period === 'CUSTOM') {
+      setShowCustomDatePicker(true);
+    }
+  };
+
+  const handleCustomDateRange = (startDate: string, endDate: string) => {
+    setCustomStartDate(startDate);
+    setCustomEndDate(endDate);
+    setShowCustomDatePicker(false);
+  };
+
+  const getSelectedPeriodDisplay = () => {
+    if (selectedPeriod === 'CUSTOM' && customStartDate && customEndDate) {
+      const start = new Date(customStartDate);
+      const end = new Date(customEndDate);
+      return `${start.getFullYear()}/${start.getMonth() + 1} - ${end.getFullYear()}/${end.getMonth() + 1}`;
+    }
+    return t(`timePeriods.${selectedPeriod}`);
   };
 
   return (
@@ -101,7 +136,7 @@ export default function HomeScreen({ navigation }: Props) {
                   styles.periodButton,
                   selectedPeriod === period.value && styles.selectedPeriod,
                 ]}
-                onPress={() => setSelectedPeriod(period.value)}
+                onPress={() => handlePeriodSelect(period.value)}
               >
                 <Text
                   style={[
@@ -109,7 +144,10 @@ export default function HomeScreen({ navigation }: Props) {
                     selectedPeriod === period.value && styles.selectedPeriodText,
                   ]}
                 >
-                  {t(`timePeriods.${period.value}`)}
+                  {period.value === selectedPeriod && selectedPeriod === 'CUSTOM' 
+                    ? getSelectedPeriodDisplay() 
+                    : t(`timePeriods.${period.value}`)
+                  }
                 </Text>
               </TouchableOpacity>
             ))}
@@ -134,6 +172,15 @@ export default function HomeScreen({ navigation }: Props) {
           <Text style={styles.infoItem}>• Buy/Sell/Hold recommendations</Text>
         </View>
       </View>
+
+      {/* Custom Date Picker Modal */}
+      <CustomDatePicker
+        visible={showCustomDatePicker}
+        onClose={() => setShowCustomDatePicker(false)}
+        onDateRangeSelected={handleCustomDateRange}
+        initialStartDate={customStartDate}
+        initialEndDate={customEndDate}
+      />
     </ScrollView>
   );
 }

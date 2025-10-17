@@ -14,7 +14,7 @@ const API_KEYS = {
   FINNHUB: process.env.FINNHUB_API_KEY || 'demo',
 };
 
-function getPeriodParams(period: string): { range: string; interval: string } {
+function getPeriodParams(period: string, customStart?: string, customEnd?: string): { range: string; interval: string } {
   switch (period) {
     case '1W':
       return { range: '1wk', interval: '1d' };
@@ -26,6 +26,32 @@ function getPeriodParams(period: string): { range: string; interval: string } {
       return { range: '6mo', interval: '1d' };
     case '1Y':
       return { range: '1y', interval: '1d' };
+    case '2Y':
+      return { range: '2y', interval: '1d' };
+    case '3Y':
+      return { range: '3y', interval: '1wk' }; // Use weekly for longer periods
+    case '5Y':
+      return { range: '5y', interval: '1wk' };
+    case 'MAX':
+      return { range: 'max', interval: '1mo' }; // Use monthly for maximum range
+    case 'CUSTOM':
+      // For custom periods, we'll calculate the range based on dates
+      if (customStart && customEnd) {
+        const start = new Date(customStart);
+        const end = new Date(customEnd);
+        const diffTime = Math.abs(end.getTime() - start.getTime());
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        
+        // Determine appropriate interval based on date range
+        if (diffDays <= 30) {
+          return { range: `${diffDays}d`, interval: '1d' };
+        } else if (diffDays <= 365) {
+          return { range: `${Math.ceil(diffDays / 30)}mo`, interval: '1d' };
+        } else {
+          return { range: `${Math.ceil(diffDays / 365)}y`, interval: '1wk' };
+        }
+      }
+      return { range: '1mo', interval: '1d' }; // Default fallback
     default:
       return { range: '1mo', interval: '1d' };
   }
@@ -224,9 +250,9 @@ function processFinnhubData(data: any, symbol: string): StockData {
   };
 }
 
-export async function fetchStockData(symbol: string, period: string): Promise<StockData> {
+export async function fetchStockData(symbol: string, period: string, customStart?: string, customEnd?: string): Promise<StockData> {
   const formattedSymbol = getSymbolFormat(symbol);
-  const { range, interval } = getPeriodParams(period);
+  const { range, interval } = getPeriodParams(period, customStart, customEnd);
   
   const dataSources = [
     {
@@ -289,5 +315,10 @@ export const TIME_PERIODS = [
   { label: '1 Month', value: '1M' },
   { label: '3 Months', value: '3M' },
   { label: '6 Months', value: '6M' },
-  { label: '1 Year', value: '1Y' }
+  { label: '1 Year', value: '1Y' },
+  { label: '2 Years', value: '2Y' },
+  { label: '3 Years', value: '3Y' },
+  { label: '5 Years', value: '5Y' },
+  { label: 'Lifetime', value: 'MAX' },
+  { label: 'Custom', value: 'CUSTOM' }
 ];

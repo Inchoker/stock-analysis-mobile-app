@@ -17,6 +17,8 @@ export type RootStackParamList = {
   Analysis: {
     symbol: string;
     period: string;
+    customStartDate?: string;
+    customEndDate?: string;
   };
   IndicatorDetail: {
     indicator: TechnicalIndicator;

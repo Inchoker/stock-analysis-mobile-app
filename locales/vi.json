@@ -20,7 +20,12 @@
     "popularStocks": "Cổ Phiếu Phổ Biến",
     "analyzeButton": "Phân Tích Cổ Phiếu",
     "errorEmptySymbol": "Vui lòng nhập mã cổ phiếu",
-    "quickSelectHint": "Chạm để chọn"
+    "quickSelectHint": "Chạm để chọn",
+    "customPeriod": "Khung Thời Gian Tùy Chỉnh",
+    "startDate": "Ngày Bắt Đầu",
+    "endDate": "Ngày Kết Thúc",
+    "selectDateRange": "Chọn Khoảng Thời Gian",
+    "invalidDateRange": "Vui lòng chọn ngày bắt đầu và kết thúc hợp lệ"
   },
   "analysis": {
     "title": "Phân Tích Kỹ Thuật",
@@ -65,7 +70,10 @@
     "6M": "6 Tháng",
     "1Y": "1 Năm",
     "2Y": "2 Năm",
-    "5Y": "5 Năm"
+    "3Y": "3 Năm",
+    "5Y": "5 Năm",
+    "MAX": "Toàn Thời Gian",
+    "CUSTOM": "Tùy Chỉnh"
   },
   "navigation": {
     "home": "Trang Chủ",

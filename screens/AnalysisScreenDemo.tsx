@@ -85,7 +85,7 @@ const generateMockStockData = (symbol: string, period: string): StockData => {
 };
 
 export default function AnalysisScreen({ navigation, route }: Props) {
-  const { symbol, period } = route.params;
+  const { symbol, period, customStartDate, customEndDate } = route.params;
   const [loading, setLoading] = useState(true);
   const [stockData, setStockData] = useState<StockData | null>(null);
   const [analysis, setAnalysis] = useState<StockAnalysis | null>(null);

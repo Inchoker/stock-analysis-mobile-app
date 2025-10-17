@@ -33,7 +33,7 @@ const screenWidth = Dimensions.get('window').width;
 
 export default function AnalysisScreen({ navigation, route }: Props) {
   const { t } = useTranslation();
-  const { symbol, period } = route.params;
+  const { symbol, period, customStartDate, customEndDate } = route.params;
   const [loading, setLoading] = useState(true);
   const [stockData, setStockData] = useState<StockData | null>(null);
   const [analysis, setAnalysis] = useState<StockAnalysis | null>(null);
@@ -59,7 +59,12 @@ export default function AnalysisScreen({ navigation, route }: Props) {
       setError(null);
       
       console.log(`Fetching data for ${currentSymbol} (${chartConfig.timeframe})`);
-      const data = await fetchStockData(currentSymbol, chartConfig.timeframe);
+      const data = await fetchStockData(
+        currentSymbol, 
+        chartConfig.timeframe, 
+        customStartDate, 
+        customEndDate
+      );
       console.log('Received data:', data);
       
       if (!data || !data.prices || data.prices.length === 0) {
