@@ -121,14 +121,6 @@ export default function HomeScreen({ navigation }: Props) {
           <Text style={styles.analyzeButtonText}>{t('home.analyzeButton')}</Text>
         </TouchableOpacity>
 
-        {/* Indicator Test Button */}
-        <TouchableOpacity 
-          style={[styles.demoButton, { backgroundColor: '#4CAF50' }]} 
-          onPress={() => navigation.navigate('IndicatorTest')}
-        >
-          <Text style={styles.demoButtonText}>🔢 Technical Indicators Calculator</Text>
-        </TouchableOpacity>
-
         {/* Info Section */}
         <View style={styles.infoSection}>
           <Text style={styles.infoTitle}>What you'll get:</Text>
