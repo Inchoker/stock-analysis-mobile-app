@@ -24,23 +24,19 @@ interface MarketDataProps {
   currentSymbol?: string;
 }
 
-const vietnameseStocks: MarketDataItem[] = [
-  { symbol: 'FPT', price: 85.50, change: 2.34, changePercent: 2.81, volume: 5200000 },
-  { symbol: 'VIC', price: 58.20, change: -1.23, changePercent: -2.07, volume: 2800000 },
-  { symbol: 'VCB', price: 92.40, change: 1.80, changePercent: 1.99, volume: 3100000 },
-  { symbol: 'VHM', price: 45.60, change: -0.90, changePercent: -1.94, volume: 8900000 },
-  { symbol: 'HPG', price: 25.30, change: 0.75, changePercent: 3.06, volume: 4500000 },
-  { symbol: 'VRE', price: 32.10, change: 0.85, changePercent: 2.72, volume: 6700000 },
-  { symbol: 'TCB', price: 28.90, change: 1.20, changePercent: 4.33, volume: 2300000 },
-  { symbol: 'MSN', price: 67.80, change: -1.45, changePercent: -2.09, volume: 1800000 },
-];
-
 export default function MarketData({ onSymbolSelect, currentSymbol }: MarketDataProps) {
   const { t } = useTranslation();
   const [watchlist, setWatchlist] = useState<string[]>(['FPT', 'VIC', 'VCB']);
+  const [isServiceUnavailable, setIsServiceUnavailable] = useState(false);
 
   const getCurrentData = () => {
-    return vietnameseStocks;
+    // No fallback data - return empty array when service is unavailable
+    if (isServiceUnavailable) {
+      return [];
+    }
+    // In a real implementation, this would fetch from an API
+    // For now, return empty to force proper error handling
+    return [];
   };
 
   const formatPrice = (price: number, symbol: string) => {
@@ -125,6 +121,30 @@ export default function MarketData({ onSymbolSelect, currentSymbol }: MarketData
     </TouchableOpacity>
   );
 
+  // Service unavailable state
+  const renderServiceUnavailable = () => (
+    <View style={styles.serviceUnavailableContainer}>
+      <Text style={styles.serviceUnavailableIcon}>📡</Text>
+      <Text style={styles.serviceUnavailableTitle}>
+        {t('market.serviceUnavailable')}
+      </Text>
+      <Text style={styles.serviceUnavailableMessage}>
+        {t('market.serviceUnavailableMessage')}
+      </Text>
+      <TouchableOpacity 
+        style={styles.serviceUnavailableButton}
+        onPress={() => {
+          // Attempt to reconnect or refresh
+          setIsServiceUnavailable(false);
+        }}
+      >
+        <Text style={styles.serviceUnavailableButtonText}>
+          {t('common.retry')}
+        </Text>
+      </TouchableOpacity>
+    </View>
+  );
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -134,42 +154,15 @@ export default function MarketData({ onSymbolSelect, currentSymbol }: MarketData
         </View>
       </View>
 
-      <ScrollView style={styles.marketList} showsVerticalScrollIndicator={false}>
-        {getCurrentData().map((item, index) => (
-          <MarketItem key={item.symbol} item={item} />
-        ))}
-      </ScrollView>
-
-      {watchlist.length > 0 && (
-        <View style={styles.watchlistSection}>
-          <Text style={styles.watchlistTitle}>Watchlist</Text>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            <View style={styles.watchlistContainer}>
-              {watchlist.map(symbol => {
-                const data = vietnameseStocks
-                  .find(item => item.symbol === symbol);
-                if (!data) return null;
-                
-                return (
-                  <TouchableOpacity
-                    key={symbol}
-                    style={[styles.watchlistItem, currentSymbol === symbol && styles.selectedWatchlistItem]}
-                    onPress={() => onSymbolSelect(symbol)}
-                  >
-                    <Text style={[styles.watchlistSymbol, currentSymbol === symbol && styles.selectedWatchlistSymbol]}>
-                      {symbol}
-                    </Text>
-                    <Text style={[
-                      styles.watchlistPrice,
-                      data.change >= 0 ? styles.positiveChange : styles.negativeChange
-                    ]}>
-                      {formatPrice(data.price, symbol)}
-                    </Text>
-                  </TouchableOpacity>
-                );
-              })}
-            </View>
-          </ScrollView>
+      {getCurrentData().length === 0 ? (
+        renderServiceUnavailable()
+      ) : (
+        <View style={styles.marketList}>
+          <View style={styles.emptyStateContainer}>
+            <Text style={styles.emptyStateMessage}>
+              {t('market.realTimeDataUnavailable')}
+            </Text>
+          </View>
         </View>
       )}
     </View>
@@ -332,5 +325,57 @@ const styles = StyleSheet.create({
   watchlistPrice: {
     fontSize: 11,
     fontWeight: '500',
+  },
+  watchlistUnavailable: {
+    fontSize: 10,
+    color: '#999',
+    fontStyle: 'italic',
+  },
+  serviceUnavailableContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 40,
+    minHeight: 200,
+  },
+  serviceUnavailableIcon: {
+    fontSize: 48,
+    marginBottom: 16,
+  },
+  serviceUnavailableTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#333',
+    textAlign: 'center',
+    marginBottom: 8,
+  },
+  serviceUnavailableMessage: {
+    fontSize: 14,
+    color: '#666',
+    textAlign: 'center',
+    lineHeight: 20,
+    marginBottom: 24,
+  },
+  serviceUnavailableButton: {
+    backgroundColor: '#2196F3',
+    paddingHorizontal: 24,
+    paddingVertical: 12,
+    borderRadius: 8,
+  },
+  serviceUnavailableButtonText: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  emptyStateContainer: {
+    padding: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  emptyStateMessage: {
+    fontSize: 14,
+    color: '#666',
+    textAlign: 'center',
+    fontStyle: 'italic',
   },
 });

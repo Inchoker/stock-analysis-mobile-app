@@ -146,9 +146,21 @@ export default function AnalysisScreen({ navigation, route }: Props) {
   if (error || !stockData || !analysis) {
     return (
       <View style={styles.centerContainer}>
-        <Text style={styles.errorText}>{error || t('analysis.noDataAvailable')}</Text>
-        <TouchableOpacity style={styles.retryButton} onPress={loadStockData}>
-          <Text style={styles.retryButtonText}>{t('common.retry')}</Text>
+        <Text style={styles.serviceUnavailableIcon}>📊</Text>
+        <Text style={styles.serviceUnavailableTitle}>
+          {t('analysis.serviceUnavailable')}
+        </Text>
+        <Text style={styles.serviceUnavailableMessage}>
+          {error || t('analysis.serviceUnavailableMessage')}
+        </Text>
+        <TouchableOpacity style={styles.serviceUnavailableButton} onPress={loadStockData}>
+          <Text style={styles.serviceUnavailableButtonText}>{t('common.retry')}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity 
+          style={styles.backButton} 
+          onPress={() => navigation.goBack()}
+        >
+          <Text style={styles.backButtonText}>{t('common.back')}</Text>
         </TouchableOpacity>
       </View>
     );
@@ -447,5 +459,50 @@ const styles = StyleSheet.create({
     color: '#999',
     fontStyle: 'italic',
     lineHeight: 18,
+  },
+  serviceUnavailableIcon: {
+    fontSize: 64,
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  serviceUnavailableTitle: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: '#333',
+    textAlign: 'center',
+    marginBottom: 12,
+  },
+  serviceUnavailableMessage: {
+    fontSize: 16,
+    color: '#666',
+    textAlign: 'center',
+    lineHeight: 24,
+    marginBottom: 30,
+    paddingHorizontal: 20,
+  },
+  serviceUnavailableButton: {
+    backgroundColor: '#2196F3',
+    paddingHorizontal: 32,
+    paddingVertical: 14,
+    borderRadius: 8,
+    marginBottom: 12,
+  },
+  serviceUnavailableButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  backButton: {
+    backgroundColor: 'transparent',
+    paddingHorizontal: 32,
+    paddingVertical: 14,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#2196F3',
+  },
+  backButtonText: {
+    color: '#2196F3',
+    fontSize: 16,
+    fontWeight: '600',
   },
 });

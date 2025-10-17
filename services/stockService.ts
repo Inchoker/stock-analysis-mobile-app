@@ -3,8 +3,6 @@ import { StockData } from '../types';
 const API_ENDPOINTS = {
   YAHOO_PROXY: 'https://api.allorigins.win/get?url=',
   YAHOO_DIRECT: 'https://query1.finance.yahoo.com/v8/finance/chart',
-  CORS_ANYWHERE: 'https://cors-anywhere.herokuapp.com/',
-  THINGPROXY: 'https://thingproxy.freeboard.io/fetch/',
 };
 
 function getPeriodParams(period: string, customStart?: string, customEnd?: string): { range: string; interval: string } {
@@ -74,32 +72,9 @@ function getSymbolFormat(symbol: string): string {
 
 async function fetchFromYahooFinance(symbol: string, range: string, interval: string): Promise<any> {
   const yahooUrl = `${API_ENDPOINTS.YAHOO_DIRECT}/${symbol}?range=${range}&interval=${interval}`;
+  const allOriginsUrl = `${API_ENDPOINTS.YAHOO_PROXY}${encodeURIComponent(yahooUrl)}`;
   
-  // Try AllOrigins first
-  try {
-    const allOriginsUrl = `${API_ENDPOINTS.YAHOO_PROXY}${encodeURIComponent(yahooUrl)}`;
-    const response = await fetch(allOriginsUrl, {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json',
-      }
-    });
-    
-    if (response.ok) {
-      const proxyData = await response.json();
-      const data = JSON.parse(proxyData.contents);
-      
-      if (data.chart?.result?.[0]) {
-        return data.chart.result[0];
-      }
-    }
-  } catch (error) {
-    console.log('AllOrigins failed, trying ThingProxy...', error);
-  }
-  
-  // Fallback to ThingProxy
-  const thingProxyUrl = `${API_ENDPOINTS.THINGPROXY}${yahooUrl}`;
-  const response = await fetch(thingProxyUrl, {
+  const response = await fetch(allOriginsUrl, {
     method: 'GET',
     headers: {
       'Accept': 'application/json',
@@ -107,13 +82,19 @@ async function fetchFromYahooFinance(symbol: string, range: string, interval: st
   });
   
   if (!response.ok) {
-    throw new Error(`Yahoo Finance API failed: ${response.status} ${response.statusText}`);
+    throw new Error(`Yahoo Finance service unavailable (HTTP ${response.status})`);
   }
   
-  const data = await response.json();
+  const proxyData = await response.json();
+  
+  if (!proxyData.contents) {
+    throw new Error('Invalid response from Yahoo Finance service');
+  }
+  
+  const data = JSON.parse(proxyData.contents);
   
   if (!data.chart?.result?.[0]) {
-    throw new Error('No data in Yahoo Finance response');
+    throw new Error(`No stock data available for symbol: ${symbol}`);
   }
   
   return data.chart.result[0];
@@ -193,9 +174,21 @@ export async function fetchStockData(symbol: string, period: string, customStart
     }
   }
   
-  // If all data sources fail, provide a clear error message
-  const errorDetails = lastError ? `: ${lastError.message}` : '';
-  throw new Error(`Unable to fetch real stock data${errorDetails}. Please check your internet connection or try again later.`);
+  // If all data sources fail, provide a service unavailable error
+  if (lastError?.message?.includes('CORS') || lastError?.message?.includes('Failed to fetch')) {
+    throw new Error('Stock data service is currently unavailable due to network connectivity issues. Please check your internet connection and try again.');
+  }
+  
+  if (lastError?.message?.includes('401') || lastError?.message?.includes('403')) {
+    throw new Error('Stock data service is temporarily unavailable due to authentication issues. Please try again later.');
+  }
+  
+  if (lastError?.message?.includes('500') || lastError?.message?.includes('502') || lastError?.message?.includes('503')) {
+    throw new Error('Stock data service is experiencing technical difficulties. Please try again in a few minutes.');
+  }
+  
+  // Generic service unavailable error
+  throw new Error('Stock data service is currently unavailable. Please try again later or contact support if the issue persists.');
 }
 
 export const POPULAR_STOCKS = [

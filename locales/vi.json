@@ -60,7 +60,9 @@
     "analysisSummary": "Tóm Tắt Phân Tích",
     "disclaimer": "Tuyên bố: Phân tích này chỉ dành cho mục đích giáo dục và không nên được coi là lời khuyên tài chính.",
     "demoDisclaimer": "🚀 Tính năng: Biểu đồ tương tác, nhiều loại biểu đồ, chỉ báo kỹ thuật, phân tích khối lượng và hơn thế nữa!\n\nLưu ý: Đây là dữ liệu demo. Kết nối với API thực để có dữ liệu giao dịch trực tiếp.",
-    "period": "Khung thời gian:"
+    "period": "Khung thời gian:",
+    "serviceUnavailable": "Dịch Vụ Phân Tích Không Khả Dụng",
+    "serviceUnavailableMessage": "Dịch vụ phân tích cổ phiếu hiện không khả dụng. Điều này có thể do sự cố kết nối mạng hoặc dịch vụ API tạm ngừng. Vui lòng kiểm tra kết nối và thử lại sau."
   },
   "indicators": {
     "sma": "Đường Trung Bình Đơn Giản (SMA)",
@@ -113,6 +115,10 @@
     "marketData": "Dữ Liệu Thị Trường",
     "watchlist": "Danh Sách Theo Dõi",
     "topGainers": "Tăng Mạnh Nhất",
-    "topLosers": "Giảm Mạnh Nhất"
+    "topLosers": "Giảm Mạnh Nhất",
+    "serviceUnavailable": "Dịch Vụ Không Khả Dụng",
+    "serviceUnavailableMessage": "Dịch vụ dữ liệu thị trường hiện không khả dụng. Vui lòng kiểm tra kết nối internet và thử lại.",
+    "dataUnavailable": "N/A",
+    "realTimeDataUnavailable": "Dữ liệu thị trường theo thời gian thực hiện không khả dụng. Vui lòng sử dụng tính năng phân tích cổ phiếu để lấy thông tin cổ phiếu riêng lẻ."
   }
 }

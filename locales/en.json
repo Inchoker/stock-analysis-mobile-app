@@ -60,7 +60,9 @@
     "analysisSummary": "Analysis Summary",
     "disclaimer": "Disclaimer: This analysis is for educational purposes only and should not be considered as financial advice.",
     "demoDisclaimer": "🚀 Features: Interactive charts, multiple chart types, technical indicators, volume analysis, and more!\n\nNote: This is demo data. Connect to real APIs for live trading data.",
-    "period": "Period:"
+    "period": "Period:",
+    "serviceUnavailable": "Analysis Service Unavailable",
+    "serviceUnavailableMessage": "Stock analysis service is currently unavailable. This may be due to network connectivity issues or API service downtime. Please check your connection and try again later."
   },
   "indicators": {
     "sma": "Simple Moving Average",
@@ -113,6 +115,10 @@
     "marketData": "Market Data",
     "watchlist": "Watchlist",
     "topGainers": "Top Gainers",
-    "topLosers": "Top Losers"
+    "topLosers": "Top Losers",
+    "serviceUnavailable": "Service Unavailable",
+    "serviceUnavailableMessage": "Market data service is currently unavailable. Please check your internet connection and try again.",
+    "dataUnavailable": "N/A",
+    "realTimeDataUnavailable": "Real-time market data is currently unavailable. Please use the stock analysis feature to get individual stock information."
   }
 }
