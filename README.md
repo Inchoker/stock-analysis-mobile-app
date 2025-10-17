@@ -1,10 +1,10 @@
-# Stock Analysis Mobile App
+# Vietnamese Stock Analysis Mobile App
 
-A React Native Expo mobile application for stock technical analysis with interactive charts, indicators, and investment recommendations.
+A React Native Expo mobile application for Vietnamese stock technical analysis with interactive charts, indicators, and investment recommendations.
 
 ## Features
 
-- **Stock Input**: Enter any stock symbol and select time periods (1W, 1M, 3M, 6M, 1Y)
+- **Vietnamese Stock Analysis**: Focus on Vietnamese stock market (FPT, VIC, VCB, VHM, etc.)
 - **Technical Indicators**: 
   - Simple Moving Averages (SMA20, SMA50)
   - Exponential Moving Averages (EMA12, EMA26)
@@ -14,12 +14,12 @@ A React Native Expo mobile application for stock technical analysis with interac
 - **Interactive Charts**: Price charts with technical analysis visualization
 - **Detailed Explanations**: Click on any indicator for detailed explanations and trading strategies
 - **Buy/Sell/Hold Recommendations**: Based on technical analysis calculations
-- **User-Friendly Interface**: Clean, intuitive mobile interface with quick stock selection
+- **User-Friendly Interface**: Clean, intuitive mobile interface with Vietnamese stock quick selection
 
 ## Screenshots
 
 The app includes three main screens:
-1. **Home Screen**: Stock input, period selection, and quick stock picks
+1. **Home Screen**: Vietnamese stock symbol input, period selection, and quick stock picks
 2. **Analysis Screen**: Price charts and technical indicators overview
 3. **Indicator Detail Screen**: Detailed explanations and trading recommendations
 
@@ -82,11 +82,16 @@ npx expo start
 ## Technical Implementation
 
 ### Data Source
-Fetches real stock data from multiple APIs including Yahoo Finance, Alpha Vantage, and Finnhub. The app will attempt to fetch data from these sources and display an error if all sources fail, ensuring no mock data is used in production.
+Fetches real Vietnamese stock data from multiple APIs including Yahoo Finance, Alpha Vantage, and Finnhub. The app formats Vietnamese stock symbols correctly (e.g., FPT.VN) and attempts to fetch data from multiple sources to ensure reliability.
+- Yahoo Finance API (with .VN suffix for Vietnamese stocks)
 - Alpha Vantage
-- Yahoo Finance API
-- IEX Cloud
 - Finnhub
+
+### Vietnamese Stock Support
+The app includes specific support for Vietnamese stocks:
+- **Stock Symbol Formatting**: Automatically adds .VN suffix for Vietnamese stocks
+- **Popular Vietnamese Stocks**: Pre-configured list of major Vietnamese companies
+- **Currency Display**: Prices displayed in VND (Vietnamese Dong)
 
 ### Technical Indicators
 All indicators are calculated client-side using custom algorithms:

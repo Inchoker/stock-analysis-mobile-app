@@ -41,9 +41,9 @@ export default function HomeScreen({ navigation }: Props) {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.content}>
-        <Text style={styles.title}>Stock Technical Analysis</Text>
+        <Text style={styles.title}>Vietnam Stock Analysis</Text>
         <Text style={styles.subtitle}>
-          Enter a stock symbol and select a time period to analyze technical indicators
+          Enter a Vietnamese stock symbol and select a time period to analyze technical indicators
         </Text>
 
         {/* Stock Input */}
@@ -53,7 +53,7 @@ export default function HomeScreen({ navigation }: Props) {
             style={styles.input}
             value={symbol}
             onChangeText={setSymbol}
-            placeholder="e.g., AAPL, GOOGL, MSFT"
+            placeholder="e.g., FPT, VIC, VCB"
             autoCapitalize="characters"
             maxLength={10}
           />
@@ -114,7 +114,7 @@ export default function HomeScreen({ navigation }: Props) {
 
         {/* Analyze Button */}
         <TouchableOpacity style={styles.analyzeButton} onPress={handleAnalyze}>
-          <Text style={styles.analyzeButtonText}>Analyze Stock</Text>
+          <Text style={styles.analyzeButtonText}>Analyze Vietnamese Stock</Text>
         </TouchableOpacity>
 
         {/* TradingView Demo Button */}
@@ -141,7 +141,7 @@ export default function HomeScreen({ navigation }: Props) {
           <Text style={styles.infoItem}>• Interactive crosshair and tooltips</Text>
           <Text style={styles.infoItem}>• Technical indicators (SMA, EMA, RSI, MACD)</Text>
           <Text style={styles.infoItem}>• Volume analysis and Bollinger Bands</Text>
-          <Text style={styles.infoItem}>• Multi-market support (Stocks, Crypto, Forex)</Text>
+          <Text style={styles.infoItem}>• Vietnamese stock market data</Text>
           <Text style={styles.infoItem}>• Watchlist and real-time data</Text>
           <Text style={styles.infoItem}>• Buy/Sell/Hold recommendations</Text>
         </View>

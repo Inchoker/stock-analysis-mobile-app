@@ -23,59 +23,26 @@ interface MarketDataProps {
   currentSymbol?: string;
 }
 
-const popularStocks: MarketDataItem[] = [
-  { symbol: 'AAPL', price: 175.43, change: 2.34, changePercent: 1.35, volume: 52000000 },
-  { symbol: 'GOOGL', price: 142.56, change: -1.23, changePercent: -0.85, volume: 28000000 },
-  { symbol: 'MSFT', price: 378.91, change: 5.67, changePercent: 1.52, volume: 31000000 },
-  { symbol: 'TSLA', price: 248.12, change: -8.45, changePercent: -3.29, volume: 89000000 },
-  { symbol: 'AMZN', price: 153.89, change: 3.21, changePercent: 2.13, volume: 45000000 },
-  { symbol: 'NVDA', price: 476.32, change: 12.67, changePercent: 2.73, volume: 67000000 },
-  { symbol: 'META', price: 325.45, change: -4.56, changePercent: -1.38, volume: 23000000 },
-  { symbol: 'NFLX', price: 442.78, change: 7.89, changePercent: 1.81, volume: 18000000 },
-];
-
-const cryptoData: MarketDataItem[] = [
-  { symbol: 'BTC-USD', price: 43256.78, change: 1234.56, changePercent: 2.94, volume: 2400000000 },
-  { symbol: 'ETH-USD', price: 2654.32, change: -67.89, changePercent: -2.49, volume: 1200000000 },
-  { symbol: 'ADA-USD', price: 0.485, change: 0.012, changePercent: 2.54, volume: 890000000 },
-  { symbol: 'SOL-USD', price: 98.76, change: 3.45, changePercent: 3.62, volume: 560000000 },
-];
-
-const forexData: MarketDataItem[] = [
-  { symbol: 'EUR/USD', price: 1.0823, change: 0.0034, changePercent: 0.31, volume: 0 },
-  { symbol: 'GBP/USD', price: 1.2756, change: -0.0078, changePercent: -0.61, volume: 0 },
-  { symbol: 'USD/JPY', price: 148.67, change: 0.45, changePercent: 0.30, volume: 0 },
-  { symbol: 'USD/CAD', price: 1.3654, change: 0.0023, changePercent: 0.17, volume: 0 },
+const vietnameseStocks: MarketDataItem[] = [
+  { symbol: 'FPT', price: 85.50, change: 2.34, changePercent: 2.81, volume: 5200000 },
+  { symbol: 'VIC', price: 58.20, change: -1.23, changePercent: -2.07, volume: 2800000 },
+  { symbol: 'VCB', price: 92.40, change: 1.80, changePercent: 1.99, volume: 3100000 },
+  { symbol: 'VHM', price: 45.60, change: -0.90, changePercent: -1.94, volume: 8900000 },
+  { symbol: 'HPG', price: 25.30, change: 0.75, changePercent: 3.06, volume: 4500000 },
+  { symbol: 'VRE', price: 32.10, change: 0.85, changePercent: 2.72, volume: 6700000 },
+  { symbol: 'TCB', price: 28.90, change: 1.20, changePercent: 4.33, volume: 2300000 },
+  { symbol: 'MSN', price: 67.80, change: -1.45, changePercent: -2.09, volume: 1800000 },
 ];
 
 export default function MarketData({ onSymbolSelect, currentSymbol }: MarketDataProps) {
-  const [selectedTab, setSelectedTab] = useState<'stocks' | 'crypto' | 'forex'>('stocks');
-  const [watchlist, setWatchlist] = useState<string[]>(['AAPL', 'GOOGL', 'TSLA']);
+  const [watchlist, setWatchlist] = useState<string[]>(['FPT', 'VIC', 'VCB']);
 
   const getCurrentData = () => {
-    switch (selectedTab) {
-      case 'stocks':
-        return popularStocks;
-      case 'crypto':
-        return cryptoData;
-      case 'forex':
-        return forexData;
-      default:
-        return popularStocks;
-    }
+    return vietnameseStocks;
   };
 
   const formatPrice = (price: number, symbol: string) => {
-    if (symbol.includes('USD') && !symbol.includes('/')) {
-      // Crypto
-      return price > 100 ? `$${price.toLocaleString()}` : `$${price.toFixed(4)}`;
-    } else if (symbol.includes('/')) {
-      // Forex
-      return price.toFixed(4);
-    } else {
-      // Stocks
-      return `$${price.toFixed(2)}`;
-    }
+    return `${price.toFixed(2)} VND`;
   };
 
   const formatVolume = (volume: number) => {
@@ -146,12 +113,11 @@ export default function MarketData({ onSymbolSelect, currentSymbol }: MarketData
     );
   };
 
-  const TabButton = ({ tab, label }: { tab: typeof selectedTab, label: string }) => (
+  const TabButton = ({ tab, label }: { tab: string, label: string }) => (
     <TouchableOpacity
-      style={[styles.tabButton, selectedTab === tab && styles.activeTabButton]}
-      onPress={() => setSelectedTab(tab)}
+      style={[styles.tabButton, styles.activeTabButton]}
     >
-      <Text style={[styles.tabText, selectedTab === tab && styles.activeTabText]}>
+      <Text style={[styles.tabText, styles.activeTabText]}>
         {label}
       </Text>
     </TouchableOpacity>
@@ -160,11 +126,9 @@ export default function MarketData({ onSymbolSelect, currentSymbol }: MarketData
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.title}>Market Data</Text>
+        <Text style={styles.title}>Vietnamese Stock Market</Text>
         <View style={styles.tabs}>
-          <TabButton tab="stocks" label="Stocks" />
-          <TabButton tab="crypto" label="Crypto" />
-          <TabButton tab="forex" label="Forex" />
+          <TabButton tab="stocks" label="Vietnamese Stocks" />
         </View>
       </View>
 
@@ -180,7 +144,7 @@ export default function MarketData({ onSymbolSelect, currentSymbol }: MarketData
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             <View style={styles.watchlistContainer}>
               {watchlist.map(symbol => {
-                const data = [...popularStocks, ...cryptoData, ...forexData]
+                const data = vietnameseStocks
                   .find(item => item.symbol === symbol);
                 if (!data) return null;
                 

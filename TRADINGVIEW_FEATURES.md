@@ -1,6 +1,6 @@
-# TradingView-Like Chart Features
+# Vietnamese Stock Analysis - TradingView-Like Chart Features
 
-Your React Native Expo stock analysis app now includes advanced TradingView-like charting functionality!
+Your React Native Expo Vietnamese stock analysis app now includes advanced TradingView-like charting functionality!
 
 ## 🚀 New Features Added
 
@@ -28,9 +28,9 @@ Your React Native Expo stock analysis app now includes advanced TradingView-like
 - **Time Labels**: X-axis time scale at the bottom
 
 ### 📱 Market Data Panel
-- **Multi-Market Support**: Stocks, Crypto, Forex
+- **Vietnamese Stock Market**: Focus on Vietnamese stock market data
 - **Watchlist**: Add/remove symbols with star functionality
-- **Real-time Price Display**: Price, change, and percentage change
+- **Real-time Price Display**: Price, change, and percentage change in VND
 - **Quick Symbol Switching**: Tap any symbol to change the chart
 
 ### 🎨 Chart Toolbar
@@ -67,7 +67,7 @@ Your React Native Expo stock analysis app now includes advanced TradingView-like
 4. **Toggle Indicators**: Enable volume, moving averages, or Bollinger bands
 
 ### Market Data
-1. **Switch Markets**: Use tabs for Stocks, Crypto, or Forex
+1. **Vietnamese Stocks**: Focus on Vietnamese stock market data
 2. **Add to Watchlist**: Tap the star icon next to any symbol
 3. **Change Symbol**: Tap any symbol to update the chart
 4. **Quick Access**: Use the watchlist at the bottom for quick switching
@@ -86,7 +86,7 @@ Your React Native Expo stock analysis app now includes advanced TradingView-like
 
 2. **Open in Expo Go**: Scan the QR code with Expo Go app
 
-3. **Navigate to Analysis**: Enter a stock symbol (e.g., AAPL, GOOGL, TSLA)
+3. **Navigate to Analysis**: Enter a Vietnamese stock symbol (e.g., FPT, VIC, VCB)
 
 4. **Explore Features**: 
    - Try different chart types
@@ -119,9 +119,6 @@ Your React Native Expo stock analysis app now includes advanced TradingView-like
 
 ## 📊 Supported Markets
 
-- **US Stocks**: AAPL, GOOGL, MSFT, TSLA, etc.
-- **Cryptocurrencies**: BTC-USD, ETH-USD, etc.
-- **Forex Pairs**: EUR/USD, GBP/USD, etc.
-- **Vietnamese Stocks**: FPT.VN, VIC.VN, etc.
+- **Vietnamese Stocks**: FPT, VIC, VCB, VHM, HPG, TCB, MSN, CTG, GAS, VRE, etc.
 
-Your app now provides a professional trading experience similar to TradingView, optimized for mobile devices! 🎉
+Your app now provides a professional trading experience similar to TradingView, specifically focused on the Vietnamese stock market and optimized for mobile devices! 🇻�📈

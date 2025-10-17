@@ -46,7 +46,8 @@ function getSymbolFormat(symbol: string): string {
     'HPG': 'HPG.VN',
     'TCB': 'TCB.VN',
     'MSN': 'MSN.VN',
-    'CTG': 'CTG.VN'
+    'CTG': 'CTG.VN',
+    'GAS': 'GAS.VN'
   };
   
   return vietnameseStocks[upperSymbol] || upperSymbol;
@@ -276,11 +277,11 @@ export const POPULAR_STOCKS = [
   { symbol: 'VCB', name: 'Vietcombank' },
   { symbol: 'VHM', name: 'Vinhomes JSC' },
   { symbol: 'HPG', name: 'Hoa Phat Group' },
-  { symbol: 'AAPL', name: 'Apple Inc.' },
-  { symbol: 'GOOGL', name: 'Alphabet Inc.' },
-  { symbol: 'MSFT', name: 'Microsoft Corp.' },
-  { symbol: 'TSLA', name: 'Tesla Inc.' },
-  { symbol: 'NVDA', name: 'NVIDIA Corp.' }
+  { symbol: 'VRE', name: 'Vincom Retail' },
+  { symbol: 'TCB', name: 'Techcombank' },
+  { symbol: 'MSN', name: 'Masan Group' },
+  { symbol: 'CTG', name: 'VietinBank' },
+  { symbol: 'GAS', name: 'PetroVietnam Gas' }
 ];
 
 export const TIME_PERIODS = [

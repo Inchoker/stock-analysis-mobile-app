@@ -14,50 +14,50 @@ import { RootStackParamList } from '../navigation/AppNavigator';
 type DemoNavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 const demoSymbols = [
-  { symbol: 'AAPL', name: 'Apple Inc.', price: 175.43, change: 2.34 },
-  { symbol: 'GOOGL', name: 'Alphabet Inc.', price: 142.56, change: -1.23 },
-  { symbol: 'TSLA', name: 'Tesla Inc.', price: 248.12, change: -8.45 },
-  { symbol: 'MSFT', name: 'Microsoft', price: 378.91, change: 5.67 },
-  { symbol: 'BTC-USD', name: 'Bitcoin', price: 43256.78, change: 1234.56 },
-  { symbol: 'ETH-USD', name: 'Ethereum', price: 2654.32, change: -67.89 },
+  { symbol: 'FPT', name: 'FPT Corporation', price: 85.50, change: 2.34 },
+  { symbol: 'VIC', name: 'Vingroup JSC', price: 58.20, change: -1.23 },
+  { symbol: 'VCB', name: 'Vietcombank', price: 92.40, change: 1.80 },
+  { symbol: 'VHM', name: 'Vinhomes JSC', price: 45.60, change: -0.90 },
+  { symbol: 'HPG', name: 'Hoa Phat Group', price: 25.30, change: 0.75 },
+  { symbol: 'TCB', name: 'Techcombank', price: 28.90, change: 1.20 },
 ];
 
 const demoFeatures = [
   {
     title: '📊 Candlestick Charts',
     description: 'Professional OHLC candlestick visualization with color-coded bull/bear candles',
-    symbol: 'AAPL',
+    symbol: 'FPT',
     period: '1D'
   },
   {
     title: '📈 Multiple Chart Types',
     description: 'Switch between candlestick, line, and area charts instantly',
-    symbol: 'GOOGL',
+    symbol: 'VIC',
     period: '1W'
   },
   {
     title: '🎯 Interactive Crosshair',
     description: 'Touch anywhere on the chart to see precise price and time data',
-    symbol: 'TSLA',
+    symbol: 'VCB',
     period: '1M'
   },
   {
     title: '📊 Technical Indicators',
     description: 'Volume bars, moving averages, Bollinger bands, and more',
-    symbol: 'MSFT',
+    symbol: 'VHM',
     period: '3M'
   },
   {
-    title: '💰 Multi-Market Data',
-    description: 'Stocks, cryptocurrencies, and forex pairs all in one app',
-    symbol: 'BTC-USD',
-    period: '1Y'
+    title: '� Real-time Data',
+    description: 'Live price updates and market data for Vietnamese stocks',
+    symbol: 'HPG',
+    period: '6M'
   },
   {
-    title: '⭐ Watchlist Management',
-    description: 'Create and manage your personal watchlist of favorite symbols',
-    symbol: 'ETH-USD',
-    period: '6M'
+    title: '🔍 Market Analysis',
+    description: 'Comprehensive analysis tools for Vietnamese stock market',
+    symbol: 'TCB',
+    period: '1Y'
   },
 ];
 
@@ -111,7 +111,7 @@ export default function TradingViewDemo() {
 
       {/* Quick Stock Access */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>🚀 Quick Demo - Popular Stocks</Text>
+        <Text style={styles.sectionTitle}>🚀 Quick Demo - Vietnamese Stocks</Text>
         <View style={styles.stockGrid}>
           {demoSymbols.map((stock, index) => (
             <TouchableOpacity
@@ -127,10 +127,7 @@ export default function TradingViewDemo() {
                 {stock.name}
               </Text>
               <Text style={styles.stockPrice}>
-                ${stock.symbol.includes('USD') ? 
-                  stock.price.toLocaleString() : 
-                  stock.price.toFixed(2)
-                }
+                {stock.price.toFixed(2)} VND
               </Text>
               <Text style={[
                 styles.stockChange,
@@ -185,7 +182,7 @@ export default function TradingViewDemo() {
         <View style={styles.instructionCard}>
           <Text style={styles.instructionTitle}>Market Data:</Text>
           <Text style={styles.instructionText}>
-            • Switch between Stocks/Crypto/Forex{'\n'}
+            • Focus on Vietnamese stock market{'\n'}
             • Add symbols to watchlist (⭐){'\n'}
             • Tap any symbol to change chart{'\n'}
             • View real-time price changes
