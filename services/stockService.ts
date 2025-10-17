@@ -3,15 +3,8 @@ import { StockData } from '../types';
 const API_ENDPOINTS = {
   YAHOO_PROXY: 'https://api.allorigins.win/get?url=',
   YAHOO_DIRECT: 'https://query1.finance.yahoo.com/v8/finance/chart',
-  ALPHA_VANTAGE: 'https://www.alphavantage.co/query',
-  FINNHUB: 'https://finnhub.io/api/v1',
   CORS_ANYWHERE: 'https://cors-anywhere.herokuapp.com/',
   THINGPROXY: 'https://thingproxy.freeboard.io/fetch/',
-};
-
-const API_KEYS = {
-  ALPHA_VANTAGE: process.env.ALPHA_VANTAGE_API_KEY || 'demo',
-  FINNHUB: process.env.FINNHUB_API_KEY || 'demo',
 };
 
 function getPeriodParams(period: string, customStart?: string, customEnd?: string): { range: string; interval: string } {
@@ -81,9 +74,32 @@ function getSymbolFormat(symbol: string): string {
 
 async function fetchFromYahooFinance(symbol: string, range: string, interval: string): Promise<any> {
   const yahooUrl = `${API_ENDPOINTS.YAHOO_DIRECT}/${symbol}?range=${range}&interval=${interval}`;
-  const proxyUrl = `${API_ENDPOINTS.YAHOO_PROXY}${encodeURIComponent(yahooUrl)}`;
   
-  const response = await fetch(proxyUrl, {
+  // Try AllOrigins first
+  try {
+    const allOriginsUrl = `${API_ENDPOINTS.YAHOO_PROXY}${encodeURIComponent(yahooUrl)}`;
+    const response = await fetch(allOriginsUrl, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+      }
+    });
+    
+    if (response.ok) {
+      const proxyData = await response.json();
+      const data = JSON.parse(proxyData.contents);
+      
+      if (data.chart?.result?.[0]) {
+        return data.chart.result[0];
+      }
+    }
+  } catch (error) {
+    console.log('AllOrigins failed, trying ThingProxy...', error);
+  }
+  
+  // Fallback to ThingProxy
+  const thingProxyUrl = `${API_ENDPOINTS.THINGPROXY}${yahooUrl}`;
+  const response = await fetch(thingProxyUrl, {
     method: 'GET',
     headers: {
       'Accept': 'application/json',
@@ -94,49 +110,13 @@ async function fetchFromYahooFinance(symbol: string, range: string, interval: st
     throw new Error(`Yahoo Finance API failed: ${response.status} ${response.statusText}`);
   }
   
-  const proxyData = await response.json();
-  const data = JSON.parse(proxyData.contents);
+  const data = await response.json();
   
   if (!data.chart?.result?.[0]) {
     throw new Error('No data in Yahoo Finance response');
   }
   
   return data.chart.result[0];
-}
-
-async function fetchFromAlphaVantage(symbol: string): Promise<any> {
-  const url = `${API_ENDPOINTS.ALPHA_VANTAGE}?function=TIME_SERIES_DAILY&symbol=${symbol}&apikey=${API_KEYS.ALPHA_VANTAGE}`;
-  
-  const response = await fetch(url);
-  if (!response.ok) {
-    throw new Error(`Alpha Vantage API failed: ${response.status}`);
-  }
-  
-  const data = await response.json();
-  if (data['Error Message'] || data['Note']) {
-    throw new Error(`Alpha Vantage: ${data['Error Message'] || data['Note']}`);
-  }
-  
-  return data;
-}
-
-async function fetchFromFinnhub(symbol: string): Promise<any> {
-  const to = Math.floor(Date.now() / 1000);
-  const from = to - (30 * 24 * 60 * 60);
-  
-  const url = `${API_ENDPOINTS.FINNHUB}/stock/candle?symbol=${symbol}&resolution=D&from=${from}&to=${to}&token=${API_KEYS.FINNHUB}`;
-  
-  const response = await fetch(url);
-  if (!response.ok) {
-    throw new Error(`Finnhub API failed: ${response.status}`);
-  }
-  
-  const data = await response.json();
-  if (data.s !== 'ok') {
-    throw new Error(`Finnhub: ${data.s}`);
-  }
-  
-  return data;
 }
 
 function processYahooData(result: any, symbol: string): StockData {
@@ -181,75 +161,6 @@ function processYahooData(result: any, symbol: string): StockData {
   };
 }
 
-function processAlphaVantageData(data: any, symbol: string): StockData {
-  const timeSeries = data['Time Series (Daily)'];
-  if (!timeSeries) {
-    throw new Error('No time series data found');
-  }
-  
-  const prices: number[] = [];
-  const volumes: number[] = [];
-  const dates: string[] = [];
-  const opens: number[] = [];
-  const highs: number[] = [];
-  const lows: number[] = [];
-  const closes: number[] = [];
-  
-  const sortedDates = Object.keys(timeSeries).sort();
-  
-  for (const date of sortedDates) {
-    const dayData = timeSeries[date];
-    const open = parseFloat(dayData['1. open']);
-    const high = parseFloat(dayData['2. high']);
-    const low = parseFloat(dayData['3. low']);
-    const close = parseFloat(dayData['4. close']);
-    const volume = parseInt(dayData['5. volume'], 10);
-    
-    opens.push(open);
-    highs.push(high);
-    lows.push(low);
-    closes.push(close);
-    prices.push(close);
-    volumes.push(volume);
-    dates.push(date);
-  }
-  
-  return {
-    symbol,
-    prices,
-    volumes,
-    dates,
-    opens,
-    highs,
-    lows,
-    closes
-  };
-}
-
-function processFinnhubData(data: any, symbol: string): StockData {
-  const closes: number[] = data.c || [];
-  const volumes: number[] = data.v || [];
-  const timestamps: number[] = data.t || [];
-  const opens: number[] = data.o || [];
-  const highs: number[] = data.h || [];
-  const lows: number[] = data.l || [];
-  
-  const dates: string[] = timestamps.map(ts => 
-    new Date(ts * 1000).toISOString().split('T')[0]
-  );
-  
-  return {
-    symbol,
-    prices: closes,
-    volumes,
-    dates,
-    opens,
-    highs,
-    lows,
-    closes
-  };
-}
-
 export async function fetchStockData(symbol: string, period: string, customStart?: string, customEnd?: string): Promise<StockData> {
   const formattedSymbol = getSymbolFormat(symbol);
   const { range, interval } = getPeriodParams(period, customStart, customEnd);
@@ -259,16 +170,6 @@ export async function fetchStockData(symbol: string, period: string, customStart
       name: 'Yahoo Finance',
       fetch: () => fetchFromYahooFinance(formattedSymbol, range, interval),
       process: (data: any) => processYahooData(data, formattedSymbol)
-    },
-    {
-      name: 'Alpha Vantage',
-      fetch: () => fetchFromAlphaVantage(formattedSymbol),
-      process: (data: any) => processAlphaVantageData(data, formattedSymbol)
-    },
-    {
-      name: 'Finnhub',
-      fetch: () => fetchFromFinnhub(formattedSymbol),
-      process: (data: any) => processFinnhubData(data, formattedSymbol)
     }
   ];
   

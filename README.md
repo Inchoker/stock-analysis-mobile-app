@@ -82,10 +82,8 @@ npx expo start
 ## Technical Implementation
 
 ### Data Source
-Fetches real Vietnamese stock data from multiple APIs including Yahoo Finance, Alpha Vantage, and Finnhub. The app formats Vietnamese stock symbols correctly (e.g., FPT.VN) and attempts to fetch data from multiple sources to ensure reliability.
+Fetches real Vietnamese stock data from Yahoo Finance API. The app formats Vietnamese stock symbols correctly (e.g., FPT.VN) and uses CORS proxy services to ensure reliable data access.
 - Yahoo Finance API (with .VN suffix for Vietnamese stocks)
-- Alpha Vantage
-- Finnhub
 
 ### Vietnamese Stock Support
 The app includes specific support for Vietnamese stocks:
