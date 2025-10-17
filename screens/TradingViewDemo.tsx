@@ -5,7 +5,6 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  Alert,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -79,24 +78,6 @@ export default function TradingViewDemo() {
     }, 500);
   };
 
-  const showFeatureInfo = () => {
-    Alert.alert(
-      'TradingView-Like Features',
-      '🚀 Your app now includes:\n\n' +
-      '• Candlestick charts with OHLC data\n' +
-      '• Interactive crosshair and tooltips\n' +
-      '• Multiple chart types (line, area, candles)\n' +
-      '• Technical indicators overlay\n' +
-      '• Volume visualization\n' +
-      '• Multi-timeframe analysis\n' +
-      '• Watchlist management\n' +
-      '• Multi-market support\n' +
-      '• Professional chart styling\n\n' +
-      'Tap any demo below to explore!',
-      [{ text: 'Got it!', style: 'default' }]
-    );
-  };
-
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
@@ -104,9 +85,6 @@ export default function TradingViewDemo() {
         <Text style={styles.subtitle}>
           Professional stock analysis with advanced charting
         </Text>
-        <TouchableOpacity style={styles.infoButton} onPress={showFeatureInfo}>
-          <Text style={styles.infoButtonText}>ℹ️ About Features</Text>
-        </TouchableOpacity>
       </View>
 
       {/* Quick Stock Access */}
@@ -221,19 +199,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#666',
     textAlign: 'center',
-    marginBottom: 15,
-  },
-  infoButton: {
-    backgroundColor: '#007bff',
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 20,
-    alignSelf: 'center',
-  },
-  infoButtonText: {
-    color: '#fff',
-    fontSize: 14,
-    fontWeight: '600',
   },
   section: {
     padding: 20,
