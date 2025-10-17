@@ -185,6 +185,46 @@ Key concepts:
           <Text style={styles.valueText}>{indicator.value.toFixed(4)}</Text>
         </View>
 
+        {/* Mathematical Formula */}
+        {indicator.formula && (
+          <View style={styles.formulaSection}>
+            <Text style={styles.sectionTitle}>📐 Mathematical Formula</Text>
+            <View style={styles.formulaCard}>
+              <Text style={styles.formulaText}>{indicator.formula}</Text>
+            </View>
+          </View>
+        )}
+
+        {/* Step-by-Step Calculation */}
+        {indicator.calculation && (
+          <View style={styles.calculationSection}>
+            <Text style={styles.sectionTitle}>🔢 Step-by-Step Calculation</Text>
+            <View style={styles.calculationCard}>
+              {/* Variables */}
+              <Text style={styles.calculationSubtitle}>Variables:</Text>
+              {Object.entries(indicator.calculation.variables).map(([key, value]) => (
+                <Text key={key} style={styles.variableText}>
+                  • {key}: {typeof value === 'number' ? value.toFixed(4) : value}
+                </Text>
+              ))}
+              
+              {/* Calculation Steps */}
+              <Text style={styles.calculationSubtitle}>Calculation Steps:</Text>
+              {indicator.calculation.steps.map((step, index) => (
+                <Text key={index} style={styles.stepText}>
+                  {index + 1}. {step}
+                </Text>
+              ))}
+              
+              {/* Interpretation */}
+              <Text style={styles.calculationSubtitle}>Interpretation:</Text>
+              <Text style={styles.interpretationText}>
+                {indicator.calculation.interpretation}
+              </Text>
+            </View>
+          </View>
+        )}
+
         {/* Quick Recommendation */}
         <View style={styles.recommendationSection}>
           <Text style={styles.sectionTitle}>Quick Recommendation</Text>
@@ -383,5 +423,60 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: '600',
+  },
+  formulaSection: {
+    marginBottom: 20,
+  },
+  formulaCard: {
+    backgroundColor: '#E8F5E8',
+    borderRadius: 12,
+    padding: 16,
+    borderLeftWidth: 4,
+    borderLeftColor: '#4CAF50',
+  },
+  formulaText: {
+    fontSize: 16,
+    color: '#2E7D32',
+    fontFamily: 'monospace',
+    fontWeight: '600',
+    textAlign: 'center',
+  },
+  calculationSection: {
+    marginBottom: 20,
+  },
+  calculationCard: {
+    backgroundColor: '#FFF8E1',
+    borderRadius: 12,
+    padding: 16,
+    borderLeftWidth: 4,
+    borderLeftColor: '#FFC107',
+  },
+  calculationSubtitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#F57F17',
+    marginTop: 12,
+    marginBottom: 8,
+  },
+  variableText: {
+    fontSize: 14,
+    color: '#F57F17',
+    marginLeft: 8,
+    marginBottom: 4,
+    fontFamily: 'monospace',
+  },
+  stepText: {
+    fontSize: 14,
+    color: '#E65100',
+    marginLeft: 8,
+    marginBottom: 6,
+    lineHeight: 20,
+  },
+  interpretationText: {
+    fontSize: 14,
+    color: '#BF360C',
+    fontStyle: 'italic',
+    lineHeight: 20,
+    marginTop: 4,
   },
 });

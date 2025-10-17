@@ -5,11 +5,13 @@ import HomeScreen from '../screens/HomeScreen';
 import AnalysisScreen from '../screens/AnalysisScreen';
 import IndicatorDetailScreen from '../screens/IndicatorDetailScreen';
 import TradingViewDemo from '../screens/TradingViewDemo';
+import IndicatorTestScreen from '../screens/IndicatorTestScreen';
 import { TechnicalIndicator } from '../types';
 
 export type RootStackParamList = {
   Home: undefined;
   TradingViewDemo: undefined;
+  IndicatorTest: undefined;
   Analysis: {
     symbol: string;
     period: string;
@@ -46,6 +48,11 @@ export default function AppNavigator() {
           name="TradingViewDemo" 
           component={TradingViewDemo}
           options={{ title: 'TradingView Features' }}
+        />
+        <Stack.Screen 
+          name="IndicatorTest" 
+          component={IndicatorTestScreen}
+          options={{ title: 'Technical Indicators Test' }}
         />
         <Stack.Screen 
           name="Analysis" 

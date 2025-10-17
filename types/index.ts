@@ -34,6 +34,16 @@ export interface TechnicalIndicator {
   signal: 'buy' | 'sell' | 'hold';
   description: string;
   recommendation: string;
+  formula?: string;
+  calculation?: IndicatorCalculationDetail;
+}
+
+export interface IndicatorCalculationDetail {
+  formula: string;
+  variables: { [key: string]: number | string };
+  steps: string[];
+  result: number;
+  interpretation: string;
 }
 
 export interface IndicatorCalculation {
