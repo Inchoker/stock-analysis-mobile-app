@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RouteProp } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { StockData, TechnicalIndicator, StockAnalysis, ChartConfig } from '../types';
 import { calculateAllIndicators } from '../utils/technicalAnalysis';
@@ -85,6 +86,7 @@ const generateMockStockData = (symbol: string, period: string): StockData => {
 };
 
 export default function AnalysisScreen({ navigation, route }: Props) {
+  const { t } = useTranslation();
   const { symbol, period, customStartDate, customEndDate } = route.params;
   const [loading, setLoading] = useState(true);
   const [stockData, setStockData] = useState<StockData | null>(null);
@@ -126,8 +128,8 @@ export default function AnalysisScreen({ navigation, route }: Props) {
         calculations,
       });
     } catch (err) {
-      setError('Failed to load stock data. Please try again.');
-      Alert.alert('Error', 'Failed to load stock data. Please try again.');
+      setError(t('analysis.failedToLoadDataRetry'));
+      Alert.alert(t('common.error'), t('analysis.failedToLoadDataRetry'));
     } finally {
       setLoading(false);
     }
@@ -180,7 +182,7 @@ export default function AnalysisScreen({ navigation, route }: Props) {
     return (
       <View style={styles.centerContainer}>
         <ActivityIndicator size="large" color="#2196F3" />
-        <Text style={styles.loadingText}>Analyzing {currentSymbol}...</Text>
+        <Text style={styles.loadingText}>{t('analysis.analyzingSymbol', { symbol: currentSymbol })}</Text>
       </View>
     );
   }
@@ -232,7 +234,7 @@ export default function AnalysisScreen({ navigation, route }: Props) {
               {priceChangePercent.toFixed(2)}%)
             </Text>
           </View>
-          <Text style={styles.periodText}>Period: {chartConfig.timeframe}</Text>
+          <Text style={styles.periodText}>{t('analysis.period')} {chartConfig.timeframe}</Text>
         </View>
 
         {/* Trading Chart */}
@@ -243,7 +245,7 @@ export default function AnalysisScreen({ navigation, route }: Props) {
           onConfigChange={setChartConfig}
         />        {/* Technical Indicators */}
         <View style={styles.indicatorsSection}>
-          <Text style={styles.sectionTitle}>Technical Indicators</Text>
+          <Text style={styles.sectionTitle}>{t('analysis.technicalIndicators')}</Text>
           {analysis.indicators.map((indicator, index) => (
             <TouchableOpacity
               key={index}
@@ -279,7 +281,7 @@ export default function AnalysisScreen({ navigation, route }: Props) {
 
         {/* Summary */}
         <View style={styles.summarySection}>
-          <Text style={styles.sectionTitle}>Analysis Summary</Text>
+          <Text style={styles.sectionTitle}>{t('analysis.analysisSummary')}</Text>
           <View style={styles.summaryCard}>
             <Text style={styles.summaryText}>
               📊 TradingView-like analysis complete! This demo shows:
@@ -290,8 +292,7 @@ export default function AnalysisScreen({ navigation, route }: Props) {
               </Text>
             ))}
             <Text style={styles.disclaimer}>
-              {'\n'}🚀 Features: Interactive charts, multiple chart types, technical indicators, volume analysis, and more!
-              {'\n\n'}Note: This is demo data. Connect to real APIs for live trading data.
+              {'\n'}{t('analysis.demoDisclaimer')}
             </Text>
           </View>
         </View>

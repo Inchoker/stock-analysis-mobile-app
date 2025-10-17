@@ -25,7 +25,16 @@
     "startDate": "Ngày Bắt Đầu",
     "endDate": "Ngày Kết Thúc",
     "selectDateRange": "Chọn Khoảng Thời Gian",
-    "invalidDateRange": "Vui lòng chọn ngày bắt đầu và kết thúc hợp lệ"
+    "invalidDateRange": "Vui lòng chọn ngày bắt đầu và kết thúc hợp lệ",
+    "infoTitle": "Những gì bạn sẽ nhận được:",
+    "infoTradingViewCharts": "• Biểu đồ chuyên nghiệp như TradingView",
+    "infoChartTypes": "• Loại biểu đồ nến, đường, và vùng",
+    "infoInteractive": "• Tương tác với crosshair và tooltips",
+    "infoTechnicalIndicators": "• Chỉ báo kỹ thuật (SMA, EMA, RSI, MACD)",
+    "infoVolumeAnalysis": "• Phân tích khối lượng và Bollinger Bands",
+    "infoVietnameseMarket": "• Dữ liệu thị trường cổ phiếu Việt Nam",
+    "infoWatchlist": "• Danh sách theo dõi và dữ liệu thời gian thực",
+    "infoRecommendations": "• Khuyến nghị Mua/Bán/Giữ"
   },
   "analysis": {
     "title": "Phân Tích Kỹ Thuật",
@@ -43,7 +52,15 @@
     "sellSignal": "BÁN",
     "holdSignal": "GIỮ",
     "strongBuy": "MUA MẠNH",
-    "strongSell": "BÁN MẠNH"
+    "strongSell": "BÁN MẠNH",
+    "analyzingSymbol": "Đang phân tích {{symbol}}...",
+    "basedOnIndicators": "Dựa trên các chỉ báo kỹ thuật, đây là những gì phân tích gợi ý:",
+    "failedToLoadData": "Không thể tải dữ liệu cổ phiếu",
+    "failedToLoadDataRetry": "Không thể tải dữ liệu cổ phiếu. Vui lòng thử lại.",
+    "analysisSummary": "Tóm Tắt Phân Tích",
+    "disclaimer": "Tuyên bố: Phân tích này chỉ dành cho mục đích giáo dục và không nên được coi là lời khuyên tài chính.",
+    "demoDisclaimer": "🚀 Tính năng: Biểu đồ tương tác, nhiều loại biểu đồ, chỉ báo kỹ thuật, phân tích khối lượng và hơn thế nữa!\n\nLưu ý: Đây là dữ liệu demo. Kết nối với API thực để có dữ liệu giao dịch trực tiếp.",
+    "period": "Khung thời gian:"
   },
   "indicators": {
     "sma": "Đường Trung Bình Đơn Giản (SMA)",
@@ -89,5 +106,13 @@
     "showIndicators": "Hiện Chỉ Báo",
     "hideIndicators": "Ẩn Chỉ Báo",
     "fullscreen": "Toàn Màn Hình"
+  },
+  "market": {
+    "vietnameseStocks": "Cổ Phiếu Việt Nam",
+    "volume": "KL:",
+    "marketData": "Dữ Liệu Thị Trường",
+    "watchlist": "Danh Sách Theo Dõi",
+    "topGainers": "Tăng Mạnh Nhất",
+    "topLosers": "Giảm Mạnh Nhất"
   }
 }

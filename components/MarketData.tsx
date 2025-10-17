@@ -8,6 +8,7 @@ import {
   FlatList,
   Dimensions,
 } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 interface MarketDataItem {
   symbol: string;
@@ -35,6 +36,7 @@ const vietnameseStocks: MarketDataItem[] = [
 ];
 
 export default function MarketData({ onSymbolSelect, currentSymbol }: MarketDataProps) {
+  const { t } = useTranslation();
   const [watchlist, setWatchlist] = useState<string[]>(['FPT', 'VIC', 'VCB']);
 
   const getCurrentData = () => {
@@ -107,7 +109,7 @@ export default function MarketData({ onSymbolSelect, currentSymbol }: MarketData
         </View>
         
         <View style={styles.volumeContainer}>
-          <Text style={styles.volume}>Vol: {formatVolume(item.volume)}</Text>
+          <Text style={styles.volume}>{t('market.volume')} {formatVolume(item.volume)}</Text>
         </View>
       </TouchableOpacity>
     );
@@ -128,7 +130,7 @@ export default function MarketData({ onSymbolSelect, currentSymbol }: MarketData
       <View style={styles.header}>
         <Text style={styles.title}>Vietnamese Stock Market</Text>
         <View style={styles.tabs}>
-          <TabButton tab="stocks" label="Vietnamese Stocks" />
+          <TabButton tab="stocks" label={t('market.vietnameseStocks')} />
         </View>
       </View>
 

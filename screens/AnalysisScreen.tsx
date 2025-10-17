@@ -84,8 +84,8 @@ export default function AnalysisScreen({ navigation, route }: Props) {
     } catch (err) {
       console.error('Stock data loading error:', err);
       const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
-      setError(`Failed to load stock data: ${errorMessage}`);
-      Alert.alert('Error', `Failed to load stock data: ${errorMessage}`);
+      setError(`${t('analysis.failedToLoadData')}: ${errorMessage}`);
+      Alert.alert(t('common.error'), `${t('analysis.failedToLoadData')}: ${errorMessage}`);
     } finally {
       setLoading(false);
     }
@@ -242,10 +242,10 @@ export default function AnalysisScreen({ navigation, route }: Props) {
 
         {/* Summary */}
         <View style={styles.summarySection}>
-          <Text style={styles.sectionTitle}>Analysis Summary</Text>
+          <Text style={styles.sectionTitle}>{t('analysis.analysisSummary')}</Text>
           <View style={styles.summaryCard}>
             <Text style={styles.summaryText}>
-              Based on the technical indicators, here's what the analysis suggests:
+              {t('analysis.basedOnIndicators')}
             </Text>
             {analysis.indicators.map((indicator, index) => (
               <Text key={index} style={styles.summaryItem}>
@@ -253,7 +253,7 @@ export default function AnalysisScreen({ navigation, route }: Props) {
               </Text>
             ))}
             <Text style={styles.disclaimer}>
-              {'\n'}Disclaimer: This analysis is for educational purposes only and should not be considered as financial advice.
+              {'\n'}{t('analysis.disclaimer')}
             </Text>
           </View>
         </View>

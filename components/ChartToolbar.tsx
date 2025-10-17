@@ -8,6 +8,7 @@ import {
   FlatList,
   Switch,
 } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { ChartConfig } from '../types';
 
 interface ChartToolbarProps {
@@ -42,6 +43,7 @@ const indicators = [
 ];
 
 export default function ChartToolbar({ config, onConfigChange, onTimeframeChange }: ChartToolbarProps) {
+  const { t } = useTranslation();
   const [showTimeframeModal, setShowTimeframeModal] = useState(false);
   const [showChartTypeModal, setShowChartTypeModal] = useState(false);
   const [showIndicatorsModal, setShowIndicatorsModal] = useState(false);
@@ -208,7 +210,7 @@ export default function ChartToolbar({ config, onConfigChange, onTimeframeChange
       >
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Technical Indicators</Text>
+            <Text style={styles.modalTitle}>{t('analysis.technicalIndicators')}</Text>
             {indicators.map((indicator) => (
               <View key={indicator.key} style={styles.indicatorItem}>
                 <View style={styles.indicatorInfo}>

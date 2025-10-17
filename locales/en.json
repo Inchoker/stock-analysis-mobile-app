@@ -25,7 +25,16 @@
     "startDate": "Start Date",
     "endDate": "End Date",
     "selectDateRange": "Select Date Range",
-    "invalidDateRange": "Please select valid start and end dates"
+    "invalidDateRange": "Please select valid start and end dates",
+    "infoTitle": "What you'll get:",
+    "infoTradingViewCharts": "• Professional TradingView-like charts",
+    "infoChartTypes": "• Candlestick, line, and area chart types",
+    "infoInteractive": "• Interactive crosshair and tooltips",
+    "infoTechnicalIndicators": "• Technical indicators (SMA, EMA, RSI, MACD)",
+    "infoVolumeAnalysis": "• Volume analysis and Bollinger Bands",
+    "infoVietnameseMarket": "• Vietnamese stock market data",
+    "infoWatchlist": "• Watchlist and real-time data",
+    "infoRecommendations": "• Buy/Sell/Hold recommendations"
   },
   "analysis": {
     "title": "Technical Analysis",
@@ -43,7 +52,15 @@
     "sellSignal": "SELL",
     "holdSignal": "HOLD",
     "strongBuy": "STRONG BUY",
-    "strongSell": "STRONG SELL"
+    "strongSell": "STRONG SELL",
+    "analyzingSymbol": "Analyzing {{symbol}}...",
+    "basedOnIndicators": "Based on the technical indicators, here's what the analysis suggests:",
+    "failedToLoadData": "Failed to load stock data",
+    "failedToLoadDataRetry": "Failed to load stock data. Please try again.",
+    "analysisSummary": "Analysis Summary",
+    "disclaimer": "Disclaimer: This analysis is for educational purposes only and should not be considered as financial advice.",
+    "demoDisclaimer": "🚀 Features: Interactive charts, multiple chart types, technical indicators, volume analysis, and more!\n\nNote: This is demo data. Connect to real APIs for live trading data.",
+    "period": "Period:"
   },
   "indicators": {
     "sma": "Simple Moving Average",
@@ -89,5 +106,13 @@
     "showIndicators": "Show Indicators",
     "hideIndicators": "Hide Indicators",
     "fullscreen": "Fullscreen"
+  },
+  "market": {
+    "vietnameseStocks": "Vietnamese Stocks",
+    "volume": "Vol:",
+    "marketData": "Market Data",
+    "watchlist": "Watchlist",
+    "topGainers": "Top Gainers",
+    "topLosers": "Top Losers"
   }
 }

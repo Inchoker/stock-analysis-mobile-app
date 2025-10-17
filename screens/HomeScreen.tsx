@@ -161,15 +161,15 @@ export default function HomeScreen({ navigation }: Props) {
 
         {/* Info Section */}
         <View style={styles.infoSection}>
-          <Text style={styles.infoTitle}>What you'll get:</Text>
-          <Text style={styles.infoItem}>• Professional TradingView-like charts</Text>
-          <Text style={styles.infoItem}>• Candlestick, line, and area chart types</Text>
-          <Text style={styles.infoItem}>• Interactive crosshair and tooltips</Text>
-          <Text style={styles.infoItem}>• Technical indicators (SMA, EMA, RSI, MACD)</Text>
-          <Text style={styles.infoItem}>• Volume analysis and Bollinger Bands</Text>
-          <Text style={styles.infoItem}>• Vietnamese stock market data</Text>
-          <Text style={styles.infoItem}>• Watchlist and real-time data</Text>
-          <Text style={styles.infoItem}>• Buy/Sell/Hold recommendations</Text>
+          <Text style={styles.infoTitle}>{t('home.infoTitle')}</Text>
+          <Text style={styles.infoItem}>{t('home.infoTradingViewCharts')}</Text>
+          <Text style={styles.infoItem}>{t('home.infoChartTypes')}</Text>
+          <Text style={styles.infoItem}>{t('home.infoInteractive')}</Text>
+          <Text style={styles.infoItem}>{t('home.infoTechnicalIndicators')}</Text>
+          <Text style={styles.infoItem}>{t('home.infoVolumeAnalysis')}</Text>
+          <Text style={styles.infoItem}>{t('home.infoVietnameseMarket')}</Text>
+          <Text style={styles.infoItem}>{t('home.infoWatchlist')}</Text>
+          <Text style={styles.infoItem}>{t('home.infoRecommendations')}</Text>
         </View>
       </View>
 
