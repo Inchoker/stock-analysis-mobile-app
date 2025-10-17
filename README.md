@@ -1,40 +1,33 @@
-# Vietnamese Stock Analysis Mobile App
+# Stock Analysis Mobile App
 
-A React Native Expo mobile application for Vietnamese stock technical analysis with interactive charts, indicators, and investment recommendations.
+A React Native Expo mobile application for stock technical analysis with interactive charts, indicators, and investment recommendations.
 
 ## Features
 
-- **Vietnamese Stock Analysis**: Focus on Vietnamese stock market (FPT, VIC, VCB, VHM, etc.)
+- **Stock Analysis**: Comprehensive stock market analysis with Vietnamese stock support
 - **Technical Indicators**: 
   - Simple Moving Averages (SMA20, SMA50)
   - Exponential Moving Averages (EMA12, EMA26)
   - Relative Strength Index (RSI)
   - MACD (Moving Average Convergence Divergence)
   - Bollinger Bands
-- **Interactive Charts**: Price charts with technical analysis visualization
-- **Detailed Explanations**: Click on any indicator for detailed explanations and trading strategies
-- **Buy/Sell/Hold Recommendations**: Based on technical analysis calculations
-- **User-Friendly Interface**: Clean, intuitive mobile interface with Vietnamese stock quick selection
+- **Interactive Charts**: Advanced price charts with technical analysis visualization
+- **Detailed Explanations**: In-depth indicator explanations and trading strategies
+- **Investment Recommendations**: AI-powered buy/sell/hold recommendations
+- **Multilingual Support**: English and Vietnamese interface
+- **Mobile Optimized**: Clean, responsive design for iOS and Android
 
-## Screenshots
+## Installation & Usage
 
-The app includes three main screens:
-1. **Home Screen**: Vietnamese stock symbol input, period selection, and quick stock picks
-2. **Analysis Screen**: Price charts and technical indicators overview
-3. **Indicator Detail Screen**: Detailed explanations and trading recommendations
+### Quick Start
 
-## Getting Started
+1. Install the Expo Go app on your mobile device
+2. Scan the QR code provided by the development team
+3. Start analyzing stocks immediately
 
-### Prerequisites
+### For Development
 
-- Node.js (v18 or higher)
-- npm or yarn
-- Expo CLI (optional, but recommended)
-- Expo Go app on your mobile device for testing
-
-### Installation
-
-1. Clone this repository
+1. Clone the repository
 ```bash
 git clone <repository-url>
 cd stock-analysis-app
@@ -47,99 +40,26 @@ npm install
 
 3. Start the development server
 ```bash
-npx expo start
+npm start
 ```
 
 4. Scan the QR code with Expo Go (Android) or Camera app (iOS)
 
-### Development Commands
+## How to Use
 
-- `npm start` - Start the Expo development server
-- `npm run android` - Run on Android emulator/device
-- `npm run ios` - Run on iOS simulator/device (macOS only)
-- `npm run web` - Run in web browser
-- `npm test` - Run tests (when implemented)
+1. **Stock Selection**: Enter any stock symbol or select from popular Vietnamese stocks
+2. **Time Period**: Choose analysis period from 1 week to 1 year
+3. **Analysis**: View comprehensive charts with technical indicators
+4. **Detailed Insights**: Tap indicators for explanations and trading recommendations
 
-## Project Structure
+## Technical Specifications
 
-```
-├── App.tsx                     # Main app component
-├── navigation/
-│   └── AppNavigator.tsx        # Navigation configuration
-├── screens/
-│   ├── HomeScreen.tsx          # Stock input and selection
-│   ├── AnalysisScreen.tsx      # Charts and indicators overview
-│   └── IndicatorDetailScreen.tsx # Detailed indicator explanations
-├── services/
-│   └── stockService.ts         # Stock data fetching from real APIs
-├── utils/
-│   └── technicalAnalysis.ts    # Technical indicator calculations
-├── types/
-│   └── index.ts               # TypeScript type definitions
-└── assets/                    # Static assets
-```
-
-## Technical Implementation
-
-### Data Source
-Fetches real Vietnamese stock data directly from Yahoo Finance API. The app formats Vietnamese stock symbols correctly (e.g., FPT.VN) for the Vietnamese stock market.
-- Yahoo Finance API (with .VN suffix for Vietnamese stocks)
-
-### Vietnamese Stock Support
-The app includes specific support for Vietnamese stocks:
-- **Stock Symbol Formatting**: Automatically adds .VN suffix for Vietnamese stocks
-- **Popular Vietnamese Stocks**: Pre-configured list of major Vietnamese companies
-- **Currency Display**: Prices displayed in VND (Vietnamese Dong)
-
-### Technical Indicators
-All indicators are calculated client-side using custom algorithms:
-- **SMA/EMA**: Moving averages for trend analysis
-- **RSI**: Momentum oscillator (0-100 scale)
-- **MACD**: Trend-following momentum indicator
-- **Bollinger Bands**: Volatility and overbought/oversold analysis
-
-### Navigation
-Uses React Navigation v6 with native stack navigator for smooth transitions between screens.
-
-### Styling
-Custom StyleSheet components with a modern, clean design optimized for mobile devices.
-
-## Usage
-
-1. **Enter Stock Symbol**: Type any stock symbol (e.g., AAPL, GOOGL) or use quick select buttons
-2. **Select Time Period**: Choose from 1 week to 1 year analysis periods
-3. **View Analysis**: See price charts and all technical indicators with buy/sell/hold signals
-4. **Get Details**: Tap any indicator for detailed explanations and trading strategies
-
-## Educational Purpose
-
-This app is designed for educational purposes to help users understand:
-- How technical indicators work
-- What different signals mean
-- Basic trading strategies
-- Risk management concepts
-
-**Important**: This is not financial advice. Always consult with financial professionals before making investment decisions.
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## Future Enhancements
-
-- [ ] Real-time stock data integration
-- [ ] Portfolio tracking
-- [ ] Price alerts
-- [ ] More technical indicators (Stochastic, Williams %R, etc.)
-- [ ] Fundamental analysis data
-- [ ] News integration
-- [ ] Social features and discussions
-- [ ] Dark mode
-- [ ] Offline data caching
+- **Framework**: React Native with Expo
+- **Language**: TypeScript for type safety
+- **Charts**: Advanced charting with ECharts integration
+- **Data Source**: Real-time stock data from Yahoo Finance API
+- **Localization**: i18next for multilingual support
+- **Navigation**: React Navigation v6
 
 ## License
 
