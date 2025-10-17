@@ -1,8 +1,12 @@
 import { StockData } from '../types';
 
 const API_ENDPOINTS = {
-  YAHOO_PROXY: 'https://api.allorigins.win/get?url=',
-  YAHOO_DIRECT: 'https://query1.finance.yahoo.com/v8/finance/chart',
+  // Direct API access - no CORS issues in React Native mobile environment
+  YAHOO_FINANCE: 'https://query1.finance.yahoo.com/v8/finance/chart',
+  
+  // Alternative data sources for fallback
+  YAHOO_FINANCE_V7: 'https://query2.finance.yahoo.com/v7/finance/chart',
+  ALPHA_VANTAGE: 'https://www.alphavantage.co/query',
 };
 
 function getPeriodParams(period: string, customStart?: string, customEnd?: string): { range: string; interval: string } {
@@ -71,33 +75,46 @@ function getSymbolFormat(symbol: string): string {
 }
 
 async function fetchFromYahooFinance(symbol: string, range: string, interval: string): Promise<any> {
-  const yahooUrl = `${API_ENDPOINTS.YAHOO_DIRECT}/${symbol}?range=${range}&interval=${interval}`;
-  const allOriginsUrl = `${API_ENDPOINTS.YAHOO_PROXY}${encodeURIComponent(yahooUrl)}`;
+  // Direct API endpoints for mobile environment (no CORS restrictions)
+  const endpoints = [
+    `${API_ENDPOINTS.YAHOO_FINANCE}/${symbol}?range=${range}&interval=${interval}`,
+    `${API_ENDPOINTS.YAHOO_FINANCE_V7}/${symbol}?range=${range}&interval=${interval}`,
+  ];
   
-  const response = await fetch(allOriginsUrl, {
-    method: 'GET',
-    headers: {
-      'Accept': 'application/json',
+  let lastError: Error | null = null;
+  
+  for (const endpoint of endpoints) {
+    try {
+      const response = await fetch(endpoint, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'User-Agent': 'StockAnalysisApp/1.0 (Mobile)',
+          'Cache-Control': 'no-cache',
+        }
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Yahoo Finance API unavailable (HTTP ${response.status})`);
+      }
+      
+      const data = await response.json();
+      
+      if (!data.chart?.result?.[0]) {
+        throw new Error(`No stock data available for symbol: ${symbol}`);
+      }
+      
+      return data.chart.result[0];
+      
+    } catch (error) {
+      lastError = error instanceof Error ? error : new Error(String(error));
+      console.warn(`Yahoo Finance endpoint failed:`, endpoint, error);
+      continue;
     }
-  });
-  
-  if (!response.ok) {
-    throw new Error(`Yahoo Finance service unavailable (HTTP ${response.status})`);
   }
   
-  const proxyData = await response.json();
-  
-  if (!proxyData.contents) {
-    throw new Error('Invalid response from Yahoo Finance service');
-  }
-  
-  const data = JSON.parse(proxyData.contents);
-  
-  if (!data.chart?.result?.[0]) {
-    throw new Error(`No stock data available for symbol: ${symbol}`);
-  }
-  
-  return data.chart.result[0];
+  // If all endpoints fail, throw the last error
+  throw lastError || new Error('All Yahoo Finance endpoints failed');
 }
 
 function processYahooData(result: any, symbol: string): StockData {
@@ -174,21 +191,29 @@ export async function fetchStockData(symbol: string, period: string, customStart
     }
   }
   
-  // If all data sources fail, provide a service unavailable error
-  if (lastError?.message?.includes('CORS') || lastError?.message?.includes('Failed to fetch')) {
-    throw new Error('Stock data service is currently unavailable due to network connectivity issues. Please check your internet connection and try again.');
+  // Handle different types of API failures
+  if (lastError?.message?.includes('Failed to fetch') ||
+      lastError?.message?.includes('Network request failed')) {
+    throw new Error('Unable to connect to stock data service. Please check your internet connection and try again.');
   }
   
   if (lastError?.message?.includes('401') || lastError?.message?.includes('403')) {
-    throw new Error('Stock data service is temporarily unavailable due to authentication issues. Please try again later.');
+    throw new Error('Access denied to stock data service. Please try again later.');
   }
   
-  if (lastError?.message?.includes('500') || lastError?.message?.includes('502') || lastError?.message?.includes('503')) {
+  if (lastError?.message?.includes('429')) {
+    throw new Error('Too many requests. Please wait a moment and try again.');
+  }
+  
+  if (lastError?.message?.includes('500') || 
+      lastError?.message?.includes('502') || 
+      lastError?.message?.includes('503') ||
+      lastError?.message?.includes('504')) {
     throw new Error('Stock data service is experiencing technical difficulties. Please try again in a few minutes.');
   }
   
   // Generic service unavailable error
-  throw new Error('Stock data service is currently unavailable. Please try again later or contact support if the issue persists.');
+  throw new Error(`Unable to fetch stock data: ${lastError?.message || 'Unknown error'}. Please try again later.`);
 }
 
 export const POPULAR_STOCKS = [
