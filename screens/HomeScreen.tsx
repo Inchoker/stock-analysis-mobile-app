@@ -117,14 +117,6 @@ export default function HomeScreen({ navigation }: Props) {
           <Text style={styles.analyzeButtonText}>Analyze Vietnamese Stock</Text>
         </TouchableOpacity>
 
-        {/* TradingView Demo Button */}
-        <TouchableOpacity 
-          style={styles.demoButton} 
-          onPress={() => navigation.navigate('TradingViewDemo')}
-        >
-          <Text style={styles.demoButtonText}>📈 Try TradingView Features</Text>
-        </TouchableOpacity>
-
         {/* Indicator Test Button */}
         <TouchableOpacity 
           style={[styles.demoButton, { backgroundColor: '#4CAF50' }]} 
