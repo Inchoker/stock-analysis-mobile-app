@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RouteProp } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { StockData, TechnicalIndicator, StockAnalysis, ChartConfig } from '../types';
 import { fetchStockData } from '../services/stockService';
@@ -17,6 +18,7 @@ import { calculateAllIndicators } from '../utils/technicalAnalysis';
 import SimpleTradingChart from '../components/SimpleTradingChart';
 import ChartToolbar from '../components/ChartToolbar';
 import MarketData from '../components/MarketData';
+import LanguageSwitcher from '../components/LanguageSwitcher';
 import { Dimensions } from 'react-native';
 
 type AnalysisScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Analysis'>;
@@ -30,6 +32,7 @@ interface Props {
 const screenWidth = Dimensions.get('window').width;
 
 export default function AnalysisScreen({ navigation, route }: Props) {
+  const { t } = useTranslation();
   const { symbol, period } = route.params;
   const [loading, setLoading] = useState(true);
   const [stockData, setStockData] = useState<StockData | null>(null);
@@ -130,7 +133,7 @@ export default function AnalysisScreen({ navigation, route }: Props) {
     return (
       <View style={styles.centerContainer}>
         <ActivityIndicator size="large" color="#2196F3" />
-        <Text style={styles.loadingText}>Analyzing {currentSymbol}...</Text>
+        <Text style={styles.loadingText}>{t('analysis.loadingData')}</Text>
       </View>
     );
   }
@@ -138,9 +141,9 @@ export default function AnalysisScreen({ navigation, route }: Props) {
   if (error || !stockData || !analysis) {
     return (
       <View style={styles.centerContainer}>
-        <Text style={styles.errorText}>{error || 'No data available'}</Text>
+        <Text style={styles.errorText}>{error || t('analysis.noDataAvailable')}</Text>
         <TouchableOpacity style={styles.retryButton} onPress={loadStockData}>
-          <Text style={styles.retryButtonText}>Retry</Text>
+          <Text style={styles.retryButtonText}>{t('common.retry')}</Text>
         </TouchableOpacity>
       </View>
     );
@@ -153,6 +156,9 @@ export default function AnalysisScreen({ navigation, route }: Props) {
 
   return (
     <View style={styles.container}>
+      {/* Language Switcher */}
+      <LanguageSwitcher style={{ margin: 10 }} />
+      
       {/* Chart Toolbar */}
       <ChartToolbar
         config={chartConfig}
@@ -182,7 +188,7 @@ export default function AnalysisScreen({ navigation, route }: Props) {
               {priceChangePercent.toFixed(2)}%)
             </Text>
           </View>
-          <Text style={styles.periodText}>Period: {chartConfig.timeframe}</Text>
+          <Text style={styles.periodText}>{t('home.timePeriod')}: {t(`timePeriods.${chartConfig.timeframe}`)}</Text>
         </View>
 
         {/* Advanced Price Chart */}
@@ -195,7 +201,7 @@ export default function AnalysisScreen({ navigation, route }: Props) {
 
         {/* Technical Indicators */}
         <View style={styles.indicatorsSection}>
-          <Text style={styles.sectionTitle}>Technical Indicators</Text>
+          <Text style={styles.sectionTitle}>{t('analysis.technicalIndicators')}</Text>
           {analysis.indicators.map((indicator, index) => (
             <TouchableOpacity
               key={index}

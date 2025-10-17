@@ -9,8 +9,10 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useTranslation } from 'react-i18next';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { POPULAR_STOCKS, TIME_PERIODS } from '../services/stockService';
+import LanguageSwitcher from '../components/LanguageSwitcher';
 
 type HomeScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Home'>;
 
@@ -19,12 +21,13 @@ interface Props {
 }
 
 export default function HomeScreen({ navigation }: Props) {
+  const { t } = useTranslation();
   const [symbol, setSymbol] = useState('');
   const [selectedPeriod, setSelectedPeriod] = useState('1M');
 
   const handleAnalyze = () => {
     if (!symbol.trim()) {
-      Alert.alert('Error', 'Please enter a stock symbol');
+      Alert.alert(t('common.error'), t('home.errorEmptySymbol'));
       return;
     }
 
@@ -41,19 +44,20 @@ export default function HomeScreen({ navigation }: Props) {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.content}>
-        <Text style={styles.title}>Vietnam Stock Analysis</Text>
+        <LanguageSwitcher />
+        <Text style={styles.title}>{t('home.title')}</Text>
         <Text style={styles.subtitle}>
-          Enter a Vietnamese stock symbol and select a time period to analyze technical indicators
+          {t('home.subtitle')}
         </Text>
 
         {/* Stock Input */}
         <View style={styles.inputSection}>
-          <Text style={styles.label}>Stock Symbol</Text>
+          <Text style={styles.label}>{t('home.stockSymbol')}</Text>
           <TextInput
             style={styles.input}
             value={symbol}
             onChangeText={setSymbol}
-            placeholder="e.g., FPT, VIC, VCB"
+            placeholder={t('home.stockSymbolPlaceholder')}
             autoCapitalize="characters"
             maxLength={10}
           />
@@ -61,7 +65,7 @@ export default function HomeScreen({ navigation }: Props) {
 
         {/* Quick Select Popular Stocks */}
         <View style={styles.quickSelectSection}>
-          <Text style={styles.label}>Quick Select</Text>
+          <Text style={styles.label}>{t('home.popularStocks')}</Text>
           <View style={styles.stockGrid}>
             {POPULAR_STOCKS.map((stock) => (
               <TouchableOpacity
@@ -88,7 +92,7 @@ export default function HomeScreen({ navigation }: Props) {
 
         {/* Time Period Selection */}
         <View style={styles.periodSection}>
-          <Text style={styles.label}>Time Period</Text>
+          <Text style={styles.label}>{t('home.timePeriod')}</Text>
           <View style={styles.periodGrid}>
             {TIME_PERIODS.map((period) => (
               <TouchableOpacity
@@ -105,7 +109,7 @@ export default function HomeScreen({ navigation }: Props) {
                     selectedPeriod === period.value && styles.selectedPeriodText,
                   ]}
                 >
-                  {period.label}
+                  {t(`timePeriods.${period.value}`)}
                 </Text>
               </TouchableOpacity>
             ))}
@@ -114,7 +118,7 @@ export default function HomeScreen({ navigation }: Props) {
 
         {/* Analyze Button */}
         <TouchableOpacity style={styles.analyzeButton} onPress={handleAnalyze}>
-          <Text style={styles.analyzeButtonText}>Analyze Vietnamese Stock</Text>
+          <Text style={styles.analyzeButtonText}>{t('home.analyzeButton')}</Text>
         </TouchableOpacity>
 
         {/* Indicator Test Button */}
@@ -123,6 +127,14 @@ export default function HomeScreen({ navigation }: Props) {
           onPress={() => navigation.navigate('IndicatorTest')}
         >
           <Text style={styles.demoButtonText}>🔢 Technical Indicators Calculator</Text>
+        </TouchableOpacity>
+
+        {/* I18n Test Button */}
+        <TouchableOpacity 
+          style={[styles.demoButton, { backgroundColor: '#FF9800' }]} 
+          onPress={() => navigation.navigate('I18nTest')}
+        >
+          <Text style={styles.demoButtonText}>🌐 Language Test (Vietnamese/English)</Text>
         </TouchableOpacity>
 
         {/* Info Section */}

@@ -1,0 +1,85 @@
+{
+  "common": {
+    "loading": "Đang tải...",
+    "error": "Lỗi",
+    "success": "Thành công",
+    "cancel": "Hủy",
+    "confirm": "Xác nhận",
+    "close": "Đóng",
+    "retry": "Thử lại",
+    "back": "Quay lại",
+    "next": "Tiếp theo",
+    "finish": "Hoàn thành"
+  },
+  "home": {
+    "title": "Phân Tích Cổ Phiếu Việt Nam",
+    "subtitle": "Nhập mã cổ phiếu Việt Nam và chọn khung thời gian để phân tích các chỉ báo kỹ thuật",
+    "stockSymbol": "Mã Cổ Phiếu",
+    "stockSymbolPlaceholder": "vd: VIC, VCB, FPT",
+    "timePeriod": "Khung Thời Gian",
+    "popularStocks": "Cổ Phiếu Phổ Biến",
+    "analyzeButton": "Phân Tích Cổ Phiếu",
+    "errorEmptySymbol": "Vui lòng nhập mã cổ phiếu",
+    "quickSelectHint": "Chạm để chọn"
+  },
+  "analysis": {
+    "title": "Phân Tích Kỹ Thuật",
+    "overview": "Tổng Quan",
+    "technicalIndicators": "Chỉ Báo Kỹ Thuật",
+    "recommendations": "Khuyến Nghị",
+    "loadingData": "Đang tải dữ liệu cổ phiếu...",
+    "errorLoadingData": "Lỗi tải dữ liệu cổ phiếu",
+    "noDataAvailable": "Không có dữ liệu cho mã này",
+    "currentPrice": "Giá Hiện Tại",
+    "change": "Thay Đổi",
+    "volume": "Khối Lượng",
+    "marketCap": "Vốn Hóa",
+    "buySignal": "MUA",
+    "sellSignal": "BÁN",
+    "holdSignal": "GIỮ",
+    "strongBuy": "MUA MẠNH",
+    "strongSell": "BÁN MẠNH"
+  },
+  "indicators": {
+    "sma": "Đường Trung Bình Đơn Giản (SMA)",
+    "ema": "Đường Trung Bình Mũ (EMA)",
+    "rsi": "Chỉ Số Sức Mạnh Tương Đối (RSI)",
+    "macd": "MACD - Hội Tụ Phân Kỳ Đường MA",
+    "bollinger": "Dải Bollinger",
+    "stochastic": "Dao Động Ngẫu Nhiên (Stochastic)",
+    "roc": "Tốc Độ Thay Đổi (ROC)",
+    "williamsr": "Williams %R",
+    "atr": "Biên Độ Dao Động Thực (ATR)",
+    "adx": "Chỉ Số Hướng Trung Bình (ADX)",
+    "cci": "Chỉ Số Kênh Hàng Hóa (CCI)",
+    "mfi": "Chỉ Số Dòng Tiền (MFI)",
+    "obv": "Khối Lượng Cân Bằng (OBV)",
+    "tsi": "Chỉ Số Sức Mạnh Thực (TSI)",
+    "ultosc": "Dao Động Tối Ưu"
+  },
+  "timePeriods": {
+    "1D": "1 Ngày",
+    "1W": "1 Tuần",
+    "1M": "1 Tháng", 
+    "3M": "3 Tháng",
+    "6M": "6 Tháng",
+    "1Y": "1 Năm",
+    "2Y": "2 Năm",
+    "5Y": "5 Năm"
+  },
+  "navigation": {
+    "home": "Trang Chủ",
+    "analysis": "Phân Tích",
+    "indicators": "Chỉ Báo",
+    "settings": "Cài Đặt"
+  },
+  "chart": {
+    "candlestick": "Nến Nhật",
+    "line": "Đường Thẳng",
+    "area": "Vùng",
+    "volume": "Khối Lượng",
+    "showIndicators": "Hiện Chỉ Báo",
+    "hideIndicators": "Ẩn Chỉ Báo",
+    "fullscreen": "Toàn Màn Hình"
+  }
+}
